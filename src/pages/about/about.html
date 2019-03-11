@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-navbar>
+    <ion-toolbar>
+      <ion-buttons end>
+        <button ion-button (click)="showPrompt()">
+          <ion-icon name="add" style="font-size: 3rem;"></ion-icon>
+        </button>
+      </ion-buttons>
+      <ion-title align="center">My refrigerator</ion-title>
+    </ion-toolbar>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="parallax">
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
+
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-card class="cards-list">
+    <ion-list>
+      <ion-item-sliding #item *ngFor="let data of data_refrig">
+        <button ion-item (click)="parentPage(data.refrig_id,data.name_refrig)">
+          <ion-icon name='cart' item-start></ion-icon>
+          {{data.name_refrig}}
+        </button>
+        <ion-item-options side="right">
+          <button ion-button color="danger" (click)="delete(data.refrig_id)"><ion-icon name='trash' item-start></ion-icon>ลบ</button>
+          <button ion-button color="primary" (click)="editName(data.refrig_id)"><ion-icon name='create' item-start></ion-icon>แก้ไข</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </ion-card>
+
+</ion-content>
+<!--<ion-content padding>-->
+  <!--<ion-list>-->
+    <!--<ion-item-sliding #item *ngFor="let data of data_refrig">-->
+      <!--<button ion-item (click)="parentPage(data.refrig_id,data.name_refrig)">-->
+        <!--{{data.name_refrig}}-->
+      <!--</button>-->
+      <!--<ion-item-options side="right">-->
+        <!--<button ion-button color="danger" (click)="delete(data.refrig_id)">DELETE</button>-->
+      <!--</ion-item-options>-->
+    <!--</ion-item-sliding>-->
+  <!--</ion-list>-->
+  <!--<ion-refresher (ionRefresh)="doRefresh($event)">-->
+    <!--<ion-refresher-content>-->
+
+    <!--</ion-refresher-content>-->
+  <!--</ion-refresher>-->
+  <!--&lt;!&ndash;<ion-fab right bottom>&ndash;&gt;-->
+    <!--&lt;!&ndash;<button ion-fab color="secondary" (click)="showPrompt()"><ion-icon name="add"></ion-icon></button>&ndash;&gt;-->
+  <!--&lt;!&ndash;</ion-fab>&ndash;&gt;-->
+<!--</ion-content>-->

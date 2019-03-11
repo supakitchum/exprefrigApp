@@ -1,0 +1,72 @@
+// http://ionicframework.com/docs/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+    @font-face {
+
+    src: url(../assets/font/Prompt-Regular.ttf);
+    }
+    .header{
+      font-family: 'Prompt', sans-serif;
+    }
+
+    .parallax { 
+        /* The image used */
+        background-image: url("../assets/imgs/bg_header.jpg") !important;
+
+        /* Set a specific height */
+        height: 100%; 
+        font-family: 'Prompt', sans-serif;
+        /* Create the parallax scrolling effect */
+        background-attachment: fixed;
+        background-position: bottom;
+        background-repeat: no-repeat;
+        background-size: cover;
+
+    }
+
+    .content{
+      background-color: transparent;
+    }
+
+    .toolbar-background {
+      background-color: #DEB887;
+    }
+
+    .tabs-md .tabbar {
+      font-family: 'Prompt', sans-serif;
+      background: #DEB887;
+    }
+
+    .stroke{
+        -webkit-text-stroke: 0.5px black;
+        color: white;
+        text-shadow:
+           3px 3px 0 #000,
+         -1px -1px 0 #000,
+          1px -1px 0 #000,
+          -1px 1px 0 #000,
+           1px 1px 0 #000;
+    }
+
+    .cards-bg{
+      background-image: url("../assets/imgs/bg_header.jpg");
+      background-color: transparent;
+    }
+
+    .card-radius{
+      border-radius: 10px;
+    }
+

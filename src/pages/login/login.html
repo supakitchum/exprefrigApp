@@ -1,0 +1,42 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!-- <ion-header>
+
+  <ion-navbar>
+    <ion-title style="text-align: center; margin-left: -20%;">เข้าสู่ระบบ</ion-title>
+  </ion-navbar>
+
+</ion-header> -->
+
+
+<ion-content padding class="test">
+<ion-grid style="margin-top: 50%;">
+  <form (ngSubmit)="loginForm()">
+    <ion-row>
+      <ion-col>
+          <ion-item>
+              <ion-label color="primary" stacked>E-mail :</ion-label>
+              <ion-input type="email" [(ngModel)]="login.email" name="email" placeholder="Your email"></ion-input>  
+          </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+          <ion-item>
+              <ion-label color="primary" stacked>Password :</ion-label>
+              <ion-input type="password" [(ngModel)]="login.password" name="password" placeholder="Your password"></ion-input>  
+          </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col text-center>
+          <button ion-button round style="width: 90%;" color="secondary" type="submit">เข้าสู่ระบบ</button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-grid>
+</ion-content>

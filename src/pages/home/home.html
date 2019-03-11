@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-navbar *navbar>
+    <ion-title style="text-align: center;">อุปกรณ์</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding class="parallax">
+  <ion-card class="card-radius">
+    <img src="assets/imgs/howto1.png">
+    <ion-card-content (click)="parentPage(id,item.name)">
+      <ion-card-title>
+        <ion-row>
+          <ion-col>
+            <button ion-button color="primary" block (click)="presentModal()">ค้นหาอุปกรณ์</button>
+          </ion-col>
+          <ion-col>
+            <button ion-button color="secondary" block (click)="doPrompt()">ลงทะเบียนอุปกรณ์</button>
+          </ion-col>
+        </ion-row>
+      </ion-card-title>
+    </ion-card-content>
+    <ion-row>
+      <ion-col>
+        <p>1. เปิดอุปกรณ์ Exprefrig</p>
+        <p>2. เลือก "ค้นหาอุปกรณ์" เพื่อเชื่อมต่อ</p>
+        <p>3. ตั้งค่าในตัวอุปกรณ์ให้ครบและ copy private_key ไว้</p>
+        <p>4. นำ private_key ไปใส่ในหน้าถัดไป</p>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+</ion-content>

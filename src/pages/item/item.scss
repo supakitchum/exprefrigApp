@@ -1,0 +1,15 @@
+page-item {
+  ion-header {
+    .button-md {
+      box-shadow: none;
+    }
+
+    .toolbar-title {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      pointer-events: none;
+      margin-left: -5%;
+    }
+  }
+}

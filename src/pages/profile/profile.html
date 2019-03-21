@@ -3,22 +3,8 @@
     <ion-title style="text-align: center;">My Account</ion-title>
   </ion-navbar>
 </ion-header>
+
 <ion-content>
-  <!--   <ion-slides pager>
-
-    <ion-slide style="background-color: green">
-      <h2>Slide 1</h2>
-    </ion-slide>
-
-    <ion-slide style="background-color: blue">
-      <h2>Slide 2</h2>
-    </ion-slide>
-
-    <ion-slide style="background-color: red">
-      <h2>Slide 3</h2>
-    </ion-slide>
-
-  </ion-slides> -->
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content>
     </ion-refresher-content>
@@ -26,7 +12,7 @@
   <ion-grid class="parallax" *ngIf="!uid">
     <ion-row class="stroke">
       <ion-col style="text-align: center;font-size: 5rem;">
-        <p>ยินดีต้อนรับสู่<br>" Exprefrig "</p>
+        <p>ยินดีต้อนรับสู่<br>" Exprefrig"</p>
       </ion-col>
     </ion-row>
     <ion-row style="padding: 10%;">
@@ -41,28 +27,20 @@
   <ion-content class="parallax" *ngIf="uid">
     <ion-list>
       <ion-card class="card-radius">
-        <img src="" height="200">
         <ion-card-content>
           <ion-card-title>
-
           </ion-card-title>
           <ion-item>
             <ion-icon name="alarm" item-start large></ion-icon>
-            <h2>วันที่หมดอายุ</h2>
+            <h2>ชื่</h2>
             <p>Test</p>
           </ion-item>
         </ion-card-content>
-        <ion-row no-padding>
-          <ion-col text-center>
-            <button ion-button clear small color="primary" icon-start>
-              <ion-icon name='create'></ion-icon>
-              แก้ไข
-            </button>
-          </ion-col>
+        <ion-row no-padding (click)="logout()">
           <ion-col text-center>
             <button ion-button clear small color="danger" icon-start>
               <ion-icon name='trash'></ion-icon>
-              ลบ
+              ออกจากระบบ
             </button>
           </ion-col>
         </ion-row>

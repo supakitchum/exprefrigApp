@@ -95,23 +95,17 @@ export class HomePage {
   }
 
   actived(pv_key:string){
-    this.url += "/put/board_factory/"+ pv_key;
     this.storage.get('uid').then((val) => {
-      this.url += "?status=yes&uid="+val;
-      this.http.put(this.url, {}, {})
+      this.http.put(this.url + "/activated", {pv_key:pv_key,status:"yes",uid:val}, {})
         .then(data => {
           console.log(data.data);
           if (data.data == 1)
             this.showAlert('Actived','ลงทะเบียนสำเร็จ');
           else
-            this.showAlert('Fail','ไม่พบรหัสนี้ในฐานข้อมูล');
+            this.showAlert('Fail','ไม่พบรหัสนี้ในฐานข้อมูล หรือ อุปกรณ์นี้ถูกลงทะเบียนไปแล้ว');
         })
         .catch(error => {
-
-          console.log(error.status);
-          console.log(error.error); // error message as string
-          console.log(error.headers);
-
+          this.showAlert('Fail','ไม่พบรหัสนี้ในฐานข้อมูล หรือ อุปกรณ์นี้ถูกลงทะเบียนไปแล้ว');
         });
       // this.pushPage = LoginPage;
       // this.params = { id: 42 };

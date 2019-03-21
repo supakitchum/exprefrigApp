@@ -23,17 +23,23 @@ import { Platform , ActionSheetController } from 'ionic-angular';
   templateUrl: 'add-item.html',
 })
 export class AddItemPage {
-  dateExp:any;
-  dateYellow:any;
+  dateExp = new Date().toISOString();
+  dateYellow = new Date().toISOString();
+  dateExpShow:any;
+  dateYellowShow:any;
   rid:any;
   url:any;
   uid:any;
   key:any;
   itemForm = {};
+  pv_key_old = null;
   myPhoto = "assets/imgs/add-photo.png";
   oldPhoto:any;
   id_noti_red:any;
   method = 0;
+  options = { year: 'numeric', month: '2-digit', day: '2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit' };
+  tzoffset = (new Date()).getTimezoneOffset() * 60000;
+  minDate: string = (new Date(Date.now() - this.tzoffset)).toISOString().slice(0, -1);
 
   constructor(
     private localNotifications: LocalNotifications,
@@ -85,6 +91,11 @@ export class AddItemPage {
       }
     });
     this.method = this.params.get('method');
+  }
+
+  setDate(dateTime:any){
+    console.log(JSON.stringify(dateTime));
+
   }
 
   presentActionSheet() {
@@ -163,33 +174,34 @@ export class AddItemPage {
 
   }
 
-  datePick(){
-    this.datePicker.show({
-      date: new Date(),
-      mode: 'datetime',
-      allowOldDates: false,
-      androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
-    }).then(
-      date => this.dateExp = date,
-      err => console.log('Error occurred while getting date: ', err)
-    );
-    this.doRefresh(null);
-  }
-
-  datePickYellow(){
-    this.datePicker.show({
-      date: new Date(),
-      mode: 'datetime',
-      allowOldDates: false,
-      androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
-    }).then(
-      date => this.dateYellow = date,
-      err => console.log('Error occurred while getting date: ', err)
-    );
-    this.doRefresh(null);
-  }
+  // datePick(){
+  //   this.datePicker.show({
+  //     date: new Date(),
+  //     mode: 'datetime',
+  //     allowOldDates: false,
+  //     androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+  //   }).then(
+  //     date => [this.dateExp = date,this.dateExpShow = date.toLocaleDateString('th-TH', this.options)],
+  //     err => console.log('Error occurred while getting date: ', err),
+  //   );
+  //   this.doRefresh(null);
+  // }
+  //
+  // datePickYellow(){
+  //   this.datePicker.show({
+  //     date: new Date(),
+  //     mode: 'datetime',
+  //     allowOldDates: false,
+  //     androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+  //   }).then(
+  //     date => [this.dateYellow = date,this.dateYellowShow = date.toLocaleDateString('th-TH', this.options)],
+  //     err => console.log('Error occurred while getting date: ', err)
+  //   );
+  //   this.doRefresh(null);
+  // }
 
   addForm(){
+    // console.log("rid: "+this.rid+" name: "+this.itemForm["name"]+" datetime: "+this.dateExp+" datetimeYellow: "+this.dateYellow+" private_key: "+this.itemForm["pvkey"]);
     let loader = this.loadingCtrl.create({
       content: "Adding..."
     });

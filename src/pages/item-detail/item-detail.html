@@ -14,14 +14,16 @@
 
 
 <ion-content padding class="parallax">
-    <ion-card-content *ngFor="let item of data" >
-      <img src="{{url}}/{{item.image}}">
+    <ion-card-content>
+      <div align="center">
+        <img src="{{url}}/{{(data === undefined) ? '':data.image}}" class="scale">
+      </div>
       <ion-card-title style="text-align: center;">
         {{name}}
       </ion-card-title>
-      <p>วันหมดอายุ : {{item.dateExp}} {{item.timeExp}}</p>
-      <p id="time">เวลาที่เหลือ :</p>
-      <p>รหัสประจำเครื่อง : {{data[0].private_key}}</p>
+      <p>วันหมดอายุ : {{(data === undefined) ? '':data.dateTime}}</p>
+      <p>เวลาที่เหลือ : <span id="time"></span></p>
+      <p>รหัสประจำเครื่อง : {{id}}</p>
     </ion-card-content>
 
 </ion-content>

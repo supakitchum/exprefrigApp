@@ -24,6 +24,7 @@ export class ItemPage {
   name = '';
   url:any;
   data = '';
+  options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit' };
   constructor(
     public storage: Storage,
     public navCtrl: NavController,
@@ -72,9 +73,9 @@ export class ItemPage {
 
   }
 
-   parentPage(id:string,name:string){
+  parentPage(id:string,name:string){
     this.navCtrl.push(ItemDetailPage, {
-      id: id,
+      pv_key: id,
       name: name
     });
   }
@@ -87,8 +88,8 @@ export class ItemPage {
     });
   }
 
-  presentModalEdit() {
-    const modal = this.modalCtrl.create(AddItemPage,{ refrig_id: this.id ,data: this.data[0],method:0 });
+  presentModalEdit(id:any) {
+    const modal = this.modalCtrl.create(AddItemPage,{ refrig_id: this.id ,data: this.data[id],method:0 });
     modal.present();
     modal.onDidDismiss(() =>{
       this.doRefresh(null);
@@ -96,8 +97,8 @@ export class ItemPage {
 
   }
 
-  deleteItem(){
-    this.http.post(this.url+'/rm/item', {private_key:this.data[0]["private_key"]}, {})
+  deleteItem(pv_key:any){
+    this.http.post(this.url+'/rm/item', {private_key:pv_key}, {})
       .then(data => {
         this.doRefresh(null);
       })

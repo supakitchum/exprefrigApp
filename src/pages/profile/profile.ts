@@ -26,13 +26,13 @@ export class ProfilePage {
   constructor(public navCtrl: NavController, private statusBar: StatusBar, public storage: Storage,public http: HTTP) {
     this.storage.get('uid').then((val) => {
       this.uid = val;
-      this.getProfile();
+      this.getProfile(val);
     });
   }
 
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
-    this.getProfile();
+    this.getProfile(this.uid);
     setTimeout(() => {
       console.log('Async operation has ended');
       refresher.complete();
@@ -47,12 +47,12 @@ export class ProfilePage {
     this.navCtrl.push('RegisterPage');
   }
 
-  getProfile() {
-    this.http.post('http://192.168.137.1/get/user', {uid:this.uid,auth:"2y$12$ZOwD7oZr.jUt7f7YnVxdy.v4P8KDajFq17ueQT1Arw9QjHsS96x3q"}, {})
+  getProfile(uid:any) {
+    this.http.post('http://192.168.137.1/get/user', {uid:uid,auth:"0fa2e78f70d377d5da274ebd4e8b5e1c"}, {})
       .then(data => {
         data = JSON.parse(data.data);
-        console.log("data : "+data);
-        this.data = data;
+        console.log(data[0]);
+        this.data = data[0];
 
       })
       .catch(error => {
@@ -63,5 +63,11 @@ export class ProfilePage {
 
       });
   }
+
+  logout(){
+    this.storage.remove('uid');
+    this.doRefresh(null);
+  }
+
 
 }

@@ -25,47 +25,35 @@ export class ItemDetailPage {
   min = 0;
   sec = 0;
   constructor(public storage: Storage,public navCtrl: NavController, public navParams: NavParams,public http: HTTP) {
-    this.id = navParams.get('id');
+    this.id = navParams.get('pv_key');
     this.name = navParams.get('name');
     storage.get('urlApi').then((val) => {
       this.url = val;
-    });
-    storage.get('uid').then((val) => {
-      this.http.get(this.url+"/get/app/device/uid="+val+"&rid="+this.id, {}, {})
+      this.http.get(val + "/get/device/"+ navParams.get('pv_key'), {}, {})
         .then(data => {
-            this.data = JSON.parse(data.data);
-            this.http.get(this.url + "/get/device/"+ this.data[0].private_key, {}, {})
-              .then(data => {
-                this.exp = JSON.parse(data.data);
-                this.hour = this.exp.hour;
-                this.min = this.exp.min;
-                this.sec = this.exp.sec;
-                this.StartTimer();
+          this.data = JSON.parse(data.data);
+          this.exp = JSON.parse(data.data);
+          this.hour = this.exp.hour;
+          this.min = this.exp.min;
+          this.sec = this.exp.sec;
+          this.StartTimer();
 
-              })
-              .catch(error => {
-
-                console.log(error.status);
-                console.log(error.error); // error message as string
-                console.log(error.headers);
-
-              });
         })
         .catch(error => {
 
-        console.log(error.status);
-        console.log(error.error); // error message as string
-        console.log(error.headers);
+          console.log(error.status);
+          console.log(error.error); // error message as string
+          console.log(error.headers);
 
         });
-        // this.pushPage = LoginPage;
-        // this.params = { id: 42 };
     });
+    // this.pushPage = LoginPage;
+    // this.params = { id: 42 };
   }
 
   StartTimer(){
     setTimeout(() => {
-      document.getElementById('time').innerText = "เวลาที่เหลือ :";
+      document.getElementById('time').innerText = "";
       if (this.hour < 0){
         this.hour = 0;
         this.min = 0;
@@ -74,17 +62,17 @@ export class ItemDetailPage {
         return;
       }
       if (this.hour < 10)
-        document.getElementById('time').innerText += "0"+this.hour.toString()+":";
+        document.getElementById('time').innerText += "0"+this.hour.toString()+" ชั่วโมง ";
       else
-        document.getElementById('time').innerText += this.hour.toString()+":";
+        document.getElementById('time').innerText += this.hour.toString()+" ชั่วโมง ";
       if (this.min < 10)
-        document.getElementById('time').innerText += "0"+this.min.toString()+":";
+        document.getElementById('time').innerText += " "+"0"+this.min.toString()+" นาที ";
       else
-        document.getElementById('time').innerText += this.min.toString()+":";
-      if (this.sec < 0)
-        document.getElementById('time').innerText += "0"+this.sec.toString();
+        document.getElementById('time').innerText += " "+this.min.toString()+" นาที";
+      if (this.sec < 10)
+        document.getElementById('time').innerText += " "+"0"+this.sec.toString() + " วินาที";
       else
-        document.getElementById('time').innerText += this.sec.toString();
+        document.getElementById('time').innerText += " "+this.sec.toString() + " วินาที";
 
       if(this.sec <= 0) {
         this.sec = 59;

@@ -35,6 +35,6 @@
     <plugin name="cordova-plugin-datepicker" spec="0.9.3" />
     <allow-navigation href="http://192.168.137.1:8100" sessionid="d9c5f65a" />
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
-    <engine name="android" spec="7.1.1" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
+    <engine name="android" spec="7.1.1" />
 </widget>

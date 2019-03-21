@@ -21,7 +21,7 @@
     <ion-list>
       <ion-item-sliding #item *ngFor="let data of data_refrig">
         <button ion-item (click)="parentPage(data.refrig_id,data.name_refrig)">
-          <ion-icon name='cart' item-start></ion-icon>
+          <ion-icon item-start><img src="https://img.icons8.com/metro/26/000000/fridge.png" style="width: 25px;height: 25px;"></ion-icon>
           {{data.name_refrig}}
         </button>
         <ion-item-options side="right">

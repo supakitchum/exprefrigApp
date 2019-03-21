@@ -27,7 +27,6 @@
 
     </ion-refresher-content>
   </ion-refresher>
-  <form (ngSubmit)="addForm()">
     <ion-grid>
       <ion-row>
         <ion-col col-12 align="center" (click)="presentActionSheet()">
@@ -37,6 +36,7 @@
           <ion-item>
             <ion-label stacked>My Device</ion-label>
             <ion-select [(ngModel)]="itemForm.pvkey" name="pvkey" id="pvkey">
+              <ion-option *ngIf="itemForm['pvkey'] != null"  value="{{itemForm['pvkey']}}">{{itemForm['pvkey']}}</ion-option>
               <ion-option  value="{{item.private_key}}" *ngFor="let item of key">{{item.private_key}}</ion-option>
             </ion-select>
           </ion-item>
@@ -49,21 +49,30 @@
         </ion-col>
         <ion-col col-12>
           <ion-item>
-            <ion-label stacked>วันเวลาใกล้หมดอายุ (ไฟสีเหลือง) :</ion-label>
-            <ion-input type="text" readonly value="{{dateYellow}}" (click)="datePickYellow()" id="datetimeYellow" name="datetimeYellow"></ion-input>
+            {{dateYellow}}
+            <ion-label>วันใกล้หมดอายุ :</ion-label>
+            <ion-datetime #yellow displayFormat="DD/MM/YYYY H:mm" [min] = "minDate" max="2050" [(ngModel)]="dateYellow" (ionChange)="minDate = dateYellow;dateExp = dateYellow;"></ion-datetime>
           </ion-item>
-        </ion-col>
-        <ion-col col-12>
           <ion-item>
-            <ion-label stacked>วันเวลาหมดอายุ (ไฟสีแดง) :</ion-label>
-            <ion-input type="text" readonly value="{{dateExp}}" (click)="datePick()" name="datetime" id="datetime"></ion-input>
+            {{dateExp}}
+            <ion-label>วันหมดอายุ :</ion-label>
+            <ion-datetime #red displayFormat="DD/MM/YYYY H:mm"  [min] = "minDate" max="2050" [(ngModel)]="dateExp"></ion-datetime>
           </ion-item>
+          <!--<ion-item>-->
+            <!--<ion-label stacked>วันเวลาใกล้หมดอายุ (ไฟสีเหลือง) :</ion-label>-->
+            <!--<ion-input type="text" readonly value="{{dateYellowShow}}" (click)="datePickYellow()" id="datetimeYellow" name="datetimeYellow"></ion-input>-->
+          <!--</ion-item>-->
         </ion-col>
+        <!--<ion-col col-12>-->
+          <!--<ion-item>-->
+            <!--<ion-label stacked>วันเวลาหมดอายุ (ไฟสีแดง) :</ion-label>-->
+            <!--<ion-input type="text" readonly value="{{dateExpShow}}" (click)="datePick()" name="datetime" id="datetime"></ion-input>-->
+          <!--</ion-item>-->
+        <!--</ion-col>-->
         <ion-col col-12>
-          <button ion-button color="secondary" style="width: 100%;" type="submit" id="btn" *ngIf="method == 1">บันทึก</button>
-          <button ion-button color="secondary" style="width: 100%;" type="submit" *ngIf="method == 0">บันทึกการแก้ไข</button>
+          <button ion-button color="secondary" style="width: 100%;" type="submit" (click)="addForm()" id="btn" *ngIf="method == 1">บันทึก</button>
+          <button ion-button color="secondary" style="width: 100%;" type="submit" (click)="addForm()" *ngIf="method == 0">บันทึกการแก้ไข</button>
         </ion-col>
       </ion-row>
     </ion-grid>
-  </form>
 </ion-content>

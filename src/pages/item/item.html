@@ -25,16 +25,18 @@
     </ion-refresher-content>
   </ion-refresher>
   <ion-list *ngFor="let item of data">
+
     <ion-card class="card-radius">
-      <img src="{{url}}/{{item.image}}" height="200">
-      <ion-card-content (click)="parentPage(id,item.name)">
+      <div align="center"><img src="{{url}}/{{item.image}}" class="scale"></div>
+      <!--(click)="parentPage(item.private_key,item.name)"-->
+      <ion-card-content>
         <ion-card-title>
           {{item.name}}
         </ion-card-title>
         <ion-item>
           <ion-icon name="alarm" item-start large></ion-icon>
           <h2>วันที่หมดอายุ</h2>
-          <p>{{item.dateExp}} {{item.timeExp}}</p>
+          <p>{{item.dateTime}}</p>
         </ion-item>
       </ion-card-content>
       <ion-row no-padding>
@@ -45,13 +47,13 @@
           <!--</button>-->
         <!--</ion-col>-->
         <ion-col text-center>
-          <button ion-button clear small color="primary" icon-start (click)="presentModalEdit()">
+          <button ion-button clear small color="primary" icon-start (click)="presentModalEdit(item.id)">
             <ion-icon name='create'></ion-icon>
             แก้ไข
           </button>
         </ion-col>
         <ion-col text-center>
-          <button ion-button clear small color="danger" icon-start (click)="deleteItem()">
+          <button ion-button clear small color="danger" icon-start (click)="deleteItem(item.private_key)">
             <ion-icon name='trash'></ion-icon>
             ลบ
           </button>

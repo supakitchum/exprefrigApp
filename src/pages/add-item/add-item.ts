@@ -85,7 +85,7 @@ export class AddItemPage {
       if(this.params.get('data')){
         let oldData = this.params.get('data');
         this.itemForm["name"] = oldData.name;
-        this.itemForm["pvkey"] = oldData.private_key;
+        this.pv_key_old = oldData.private_key;
         this.oldPhoto = val + "/" + oldData.image;
         this.myPhoto = val + "/" + oldData.image;
       }

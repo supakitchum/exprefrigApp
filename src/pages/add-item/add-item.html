@@ -36,7 +36,7 @@
           <ion-item>
             <ion-label stacked>My Device</ion-label>
             <ion-select [(ngModel)]="itemForm.pvkey" name="pvkey" id="pvkey">
-              <ion-option *ngIf="itemForm['pvkey'] != null"  value="{{itemForm['pvkey']}}">{{itemForm['pvkey']}}</ion-option>
+              <ion-option *ngIf="pv_key_old != null" selected="true"  value="{{pv_key_old}}">{{pv_key_old}}</ion-option>
               <ion-option  value="{{item.private_key}}" *ngFor="let item of key">{{item.private_key}}</ion-option>
             </ion-select>
           </ion-item>
@@ -51,12 +51,12 @@
           <ion-item>
             {{dateYellow}}
             <ion-label>วันใกล้หมดอายุ :</ion-label>
-            <ion-datetime #yellow displayFormat="DD/MM/YYYY H:mm" [min] = "minDate" max="2050" [(ngModel)]="dateYellow" (ionChange)="minDate = dateYellow;dateExp = dateYellow;"></ion-datetime>
+            <ion-datetime #yellow displayFormat="DD/MM/YYYY HH:mm" [min] = "minDate" max="2050" [(ngModel)]="dateYellow" (ionChange)="minDate = dateYellow;dateExp = dateYellow;"></ion-datetime>
           </ion-item>
           <ion-item>
             {{dateExp}}
             <ion-label>วันหมดอายุ :</ion-label>
-            <ion-datetime #red displayFormat="DD/MM/YYYY H:mm"  [min] = "minDate" max="2050" [(ngModel)]="dateExp"></ion-datetime>
+            <ion-datetime #red displayFormat="DD/MM/YYYY HH:mm"  [min] = "minDate" max="2050" [(ngModel)]="dateExp"></ion-datetime>
           </ion-item>
           <!--<ion-item>-->
             <!--<ion-label stacked>วันเวลาใกล้หมดอายุ (ไฟสีเหลือง) :</ion-label>-->

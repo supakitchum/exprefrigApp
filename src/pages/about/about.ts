@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import {NavController, AlertController, Platform, ModalController} from 'ionic-angular';
+import {NavController, AlertController, Platform, ModalController,MenuController,ActionSheetController} from 'ionic-angular';
 import { HTTP } from '@ionic-native/http';
 import { Storage } from '@ionic/storage';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { ItemPage } from '../item/item';
 import { AddRefrigeratorPage } from "../add-refrigerator/add-refrigerator";
+
 
 
 @Component({
@@ -17,19 +18,72 @@ export class AboutPage {
   params: Object;
   uid: any;
   pushPage: any;
+  activeMenu: string;
+  hold: boolean = false;
+  timeoutHandler: any;
+  count = 0;
   constructor(
     private localNotifications: LocalNotifications,
     public storage: Storage,
     public http: HTTP,
     public navCtrl: NavController,
     public alertCtrl: AlertController,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    public menu: MenuController,
+    public actionSheetCtrl: ActionSheetController
   )
   {
     storage.get('urlApi').then((val) => {
       this.url = val;
     });
     this.getData();
+  }
+
+  holdCount(id:any) {
+    this.hold = true;
+    this.timeoutHandler = setInterval(() => {
+      if (this.count == 2) {
+        this.presentActionSheet(id);
+        if (this.timeoutHandler) {
+          clearTimeout(this.timeoutHandler);
+          this.timeoutHandler = null;
+          this.count = 0;
+        }
+      }
+      ++this.count;
+    }, 200);
+
+  }
+
+  presentActionSheet(id:any) {
+    const actionSheet = this.actionSheetCtrl.create({
+      buttons: [
+        {
+          text: 'แก้ไข',
+          icon: 'create',
+          handler: () => {
+            this.editName(id);
+            this.hold = false;
+          }
+        }, {
+          text: 'ลบ',
+          icon: 'trash',
+          handler: () => {
+            this.delete(id);
+            this.hold = false;
+          }
+        }, {
+          text: 'ยกเลิก',
+          role: 'cancel',
+          icon: 'close',
+          handler: () => {
+            console.log('Cancel clicked');
+            this.hold = false;
+          }
+        }
+      ]
+    });
+    actionSheet.present();
   }
 
   getData(){
@@ -54,11 +108,9 @@ export class AboutPage {
 
   doRefresh(refresher) {
     this.getData();
-    if(refresher !== null){
-      setTimeout(() => {
-        refresher.complete();
-      }, 2000);
-    }
+    setTimeout(() => {
+      refresher.complete();
+    }, 2000);
 
   }
 
@@ -120,8 +172,8 @@ export class AboutPage {
 
   showPrompt() {
     const prompt = this.alertCtrl.create({
-      title: 'New Refrigerator',
-      message: "Enter a name for new refrigerator.",
+      title: 'สร้างตู้เย็นใหม่',
+      message: "กรุณาใส่ชื่อที่ต้องการ",
       inputs: [
         {
           name: 'name',
@@ -130,13 +182,13 @@ export class AboutPage {
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: 'ยกเลิก',
           handler: data => {
             console.log('Cancel clicked');
           }
         },
         {
-          text: 'Add',
+          text: 'สร้าง',
           handler: data => {
             this.http.post(this.url+'/refrigerator/add', {name:data.name,uid:this.uid}, {})
               .then(data => {

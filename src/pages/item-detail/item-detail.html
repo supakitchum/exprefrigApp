@@ -12,18 +12,28 @@
 
 </ion-header>
 
-
-<ion-content padding class="parallax">
-    <ion-card-content>
-      <div align="center">
-        <img src="{{url}}/{{(data === undefined) ? '':data.image}}" class="scale">
-      </div>
-      <ion-card-title style="text-align: center;">
-        {{name}}
-      </ion-card-title>
-      <p>วันหมดอายุ : {{(data === undefined) ? '':data.dateTime}}</p>
-      <p>เวลาที่เหลือ : <span id="time"></span></p>
-      <p>รหัสประจำเครื่อง : {{id}}</p>
-    </ion-card-content>
-
+<ion-content id="bg" padding class="backgroud-dynamic">
+  <ion-grid>
+    <ion-row text-center>
+      <ion-card class="cards-list" style="background-color: rgba(100, 100, 100, 0.7) !important;">
+        <ion-list style="background-color: rgba(0, 0, 0, 0.3) !important;padding: 10px 10px 10px 10px;">
+          <ion-col col-12 text-center>
+            <span id="time" style="font-size: 5rem;">........</span>
+          </ion-col>
+          <ion-item>
+            <ion-icon name="alarm" item-start large></ion-icon>วันที่หมดอายุ<br>
+            {{(data === undefined) ? '':data.dateTime}}
+          </ion-item>
+          <ion-item>
+            <ion-icon item-start large><img src="../../assets/imgs/wifi-icon.png" style="width: 28px;height: 35px;"></ion-icon>รหัสประจำอุปกรณ์<br>
+            {{id}}
+          </ion-item>
+          <ion-item>
+            <ion-icon name="create" item-start large></ion-icon>แก้ไขเมื่อ<br>
+            {{(data === undefined) ? '':data.updated_at}}
+          </ion-item>
+        </ion-list>
+      </ion-card>
+    </ion-row>
+  </ion-grid>
 </ion-content>

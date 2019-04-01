@@ -4,12 +4,51 @@ page-item {
       box-shadow: none;
     }
 
+    .back-button{
+      position: absolute;
+    }
+
     .toolbar-title {
       position: absolute;
       width: 100%;
       text-align: center;
       pointer-events: none;
-      margin-left: -5%;
+    }
+
+    .icon{
+      color: white;
     }
   }
+
+  .circle-green{
+    background-color: #4cd964;
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    border-color: #4cd964;
+    animation: blinker 2s linear infinite;
+  }
+
+  .circle-yellow{
+    background-color: gold;
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    animation: blinker 2s linear infinite;
+  }
+
+  .circle-red{
+    background-color: red;
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    animation: blinker 2s linear infinite;
+  }
+
+  @keyframes blinker {
+    50% {
+      opacity: 0.5;
+    }
+  }
+
 }

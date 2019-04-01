@@ -1,12 +1,8 @@
 import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
-import {StatusBar} from '@ionic-native/status-bar';
-import {Storage} from '@ionic/storage';
-
-
-import {LoginPage} from '../login/login';
-import {RegisterPage} from '../register/register';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Storage} from "@ionic/storage";
 import {HTTP} from "@ionic-native/http";
+import {Events} from "ionic-angular";
 
 /**
  * Generated class for the ProfilePage page.
@@ -15,59 +11,68 @@ import {HTTP} from "@ionic-native/http";
  * Ionic pages and navigation.
  */
 
+@IonicPage()
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html',
 })
 export class ProfilePage {
+  email: string;
+  name: string;
+  password: string;
+  url: string;
   uid: any;
-  url:any;
-  data:any;
-  constructor(public navCtrl: NavController, private statusBar: StatusBar, public storage: Storage,public http: HTTP) {
-    this.storage.get('uid').then((val) => {
-      this.uid = val;
-      this.getProfile(val);
-    });
-  }
 
-  doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
-    this.getProfile(this.uid);
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      refresher.complete();
-    }, 2000);
-  }
-
-  login() {
-    this.navCtrl.push('LoginPage');
-  }
-
-  reg() {
-    this.navCtrl.push('RegisterPage');
-  }
-
-  getProfile(uid:any) {
-    this.http.post('http://192.168.137.1/get/user', {uid:uid,auth:"0fa2e78f70d377d5da274ebd4e8b5e1c"}, {})
-      .then(data => {
-        data = JSON.parse(data.data);
-        console.log(data[0]);
-        this.data = data[0];
-
-      })
-      .catch(error => {
-
-        console.log(error.status);
-        console.log(error.error); // error message as string
-        console.log(error.headers);
-
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              public storage: Storage,
+              public http: HTTP,
+              public events: Events) {
+    this.storage.get("email")
+      .then(val => {
+        this.email = val;
+        this.storage.get("name")
+          .then(name => {
+            this.name = name;
+          });
+        this.storage.get("urlApi")
+          .then(api => {
+            this.url = api;
+          });
+        this.storage.get("uid")
+          .then(uid => {
+            this.uid = uid;
+          });
       });
   }
 
-  logout(){
-    this.storage.remove('uid');
-    this.doRefresh(null);
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad ProfilePage');
   }
 
+  submit() {
+    if (this.password) {
+      this.http.put(this.url + "/update/" + this.uid, {
+        auth: "0fa2e78f70d377d5da274ebd4e8b5e1c",
+        name: this.name,
+        password: this.password
+      }, {})
+        .then(data => {
+            alert("success");
+            this.storage.set("name", this.name);
+            this.events.publish('user:login');
+          }
+        )
+    }
+    else {
+      this.http.put(this.url + "/update/" + this.uid, {auth: "0fa2e78f70d377d5da274ebd4e8b5e1c", name: this.name}, {})
+        .then(data => {
+            alert("success");
+            this.storage.set("name", this.name);
+            this.events.publish('user:login');
+          }
+        )
+    }
+  }
 
 }

@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {ActionSheetController, NavController, ViewController} from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { HTTP } from '@ionic-native/http';
 import { Storage } from '@ionic/storage';
 import { ModalController, NavParams } from 'ionic-angular';
 import { WifiscannerPage } from '../wifiscanner/wifiscanner';
+
+import { LoadingController } from "ionic-angular";
 
 
 @Component({
@@ -15,21 +17,37 @@ export class HomePage {
   url:any;
   data = '';
   uid = 0;
+  modelCheck:boolean = false;
+  devices:any = [{"private_key":null}];
+  timeoutHandler: any;
+  count = 0;
   constructor
   (
     public modalCtrl: ModalController,
     public http: HTTP,
     public navCtrl: NavController,
     public alertCtrl: AlertController,
-    public storage: Storage){
+    public storage: Storage,
+    public viewCtrl: ViewController,
+    public params: NavParams,
+    private loadingCtrl:LoadingController,
+    public actionSheetCtrl: ActionSheetController){
     storage.get('urlApi').then((val) => {
       this.url = val;
+      if (this.params.get('modelCheck')){
+        this.modelCheck = this.params.get('modelCheck');
+      }
     });
     this.getUid();
-    if (this.uid == 0){
-      this.navCtrl.parent.select(2);
-    }
   }
+
+  getDevice(){
+    this.http.get(this.url + "/get/all/myDevice/"+this.uid,{},{})
+      .then(key=>{
+        this.devices = JSON.parse(key.data)
+      })
+  }
+
   showAlert(str1:string,str2:string) {
     const alert = this.alertCtrl.create({
       title: str1,
@@ -39,16 +57,10 @@ export class HomePage {
     alert.present();
   }
 
-  ionViewDidLoad() {
-    if( typeof( this.uid ) !== "undefined" || this.uid == 0){
-      this.navCtrl.parent.select(2);
-    }
-    console.log('ionViewDidLoad ItemPage');
-  }
-
   getUid(){
     this.storage.get('uid').then((val) => {
       this.uid = val;
+      this.getDevice();
     });
   }
 
@@ -65,25 +77,57 @@ export class HomePage {
     modal.present();
   }
 
+  dismiss() {
+    this.viewCtrl.dismiss();
+  }
+
+  presentActionSheet(key:any) {
+    const actionSheet = this.actionSheetCtrl.create({
+      buttons: [
+        {
+          text: 'ลบ',
+          icon: 'trash',
+          handler: () => {
+            this.delete(key);
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+  holdCount(pv_key:any) {
+    this.timeoutHandler = setInterval(() => {
+      if (this.count == 2) {
+        this.presentActionSheet(pv_key);
+        clearTimeout(this.timeoutHandler);
+        this.timeoutHandler = null;
+        this.count = 0;
+      }
+      ++this.count;
+    }, 200);
+
+  }
+
   doPrompt() {
     let prompt = this.alertCtrl.create({
       title: 'บันทึกอุปกรณ์',
-      message: "โปรดกรอก Private_key ของอุปกรณ์ลงในช่องด้านล่าง",
+      message: "โปรดกรอกรหัสประจำอุปกรณ์ลงในช่องด้านล่าง",
       inputs: [
         {
           name: 'pv_key',
-          placeholder: 'Private key'
+          placeholder: 'รหัสประจำอุปกรณ์'
         },
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: 'ยกเลิก',
           handler: data => {
             console.log('Cancel clicked');
           }
         },
         {
-          text: 'Active',
+          text: 'ลงทะเบียนอุปกรณ์',
           handler: data => {
             console.log('Saved clicked');
             this.actived(data.pv_key);
@@ -99,8 +143,10 @@ export class HomePage {
       this.http.put(this.url + "/activated", {pv_key:pv_key,status:"yes",uid:val}, {})
         .then(data => {
           console.log(data.data);
-          if (data.data == 1)
+          if (data.data == 1){
             this.showAlert('Actived','ลงทะเบียนสำเร็จ');
+            this.doRefresh(null);
+          }
           else
             this.showAlert('Fail','ไม่พบรหัสนี้ในฐานข้อมูล หรือ อุปกรณ์นี้ถูกลงทะเบียนไปแล้ว');
         })
@@ -110,6 +156,26 @@ export class HomePage {
       // this.pushPage = LoginPage;
       // this.params = { id: 42 };
     });
+  }
+
+  doRefresh(refresher) {
+    this.getDevice();
+    let loader = this.loadingCtrl.create({
+      content: "รอสักครู่"
+    });
+    loader.present();
+    setTimeout(() => {
+      loader.dismiss();
+      refresher.complete();
+    }, 2000);
+
+  }
+
+  delete(key:string){
+    this.http.delete(this.url + "/delete/device/"+key,{},{})
+      .then(val=>{
+        this.doRefresh(null);
+      })
   }
 }
 

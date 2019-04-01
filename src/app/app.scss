@@ -1,6 +1,5 @@
 // http://ionicframework.com/docs/theming/
 
-
 // App Global Sass
 // --------------------------------------------------
 // Put style rules here that you want to apply globally. These
@@ -14,66 +13,117 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
-    @font-face {
+@font-face {
 
-    src: url(../assets/font/Prompt-Regular.ttf);
-    }
-    .header{
-      font-family: 'Prompt', sans-serif;
-    }
+  src: url(../assets/font/Prompt-Regular.ttf);
+}
 
-    .parallax { 
-        /* The image used */
-        background-image: url("../assets/imgs/bg_header.jpg") !important;
+.header {
+  font-family: 'Prompt', sans-serif;
+}
 
-        /* Set a specific height */
-        height: 100%; 
-        font-family: 'Prompt', sans-serif;
-        /* Create the parallax scrolling effect */
-        background-attachment: fixed;
-        background-position: bottom;
-        background-repeat: no-repeat;
-        background-size: cover;
+.backgroud-dynamic{
+  /* Set a specific height */
+  height: 100%;
+  font-family: 'Prompt', sans-serif;
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  color: white;
+  background-blend-mode: saturation;
+  display: grid;
+}
 
-    }
+.parallax {
+  /* The image used */
+  background-image: url("../assets/imgs/bg.jpg") !important;
+  /* Set a specific height */
+  height: 100%;
+  font-family: 'Prompt', sans-serif;
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 
-    .content{
-      background-color: transparent;
-    }
+}
 
-    .toolbar-background {
-      background-color: #DEB887;
-    }
+.parallax-list-item {
+  /* The image used */
+  background-image: url("../assets/imgs/bg-list-item.jpg") !important;
+  /* Set a specific height */
+  height: 100%;
+  font-family: 'Prompt', sans-serif;
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 
-    .tabs-md .tabbar {
-      font-family: 'Prompt', sans-serif;
-      background: #DEB887;
-    }
+}
 
-    .stroke{
-        -webkit-text-stroke: 0.5px black;
-        color: white;
-        text-shadow:
-           3px 3px 0 #000,
-         -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px 1px 0 #000,
-           1px 1px 0 #000;
-    }
+.content {
+  background-color: transparent;
+}
 
-    .cards-bg{
-      background-image: url("../assets/imgs/bg_header.jpg");
-      background-color: transparent;
-    }
+.toolbar-background {
+  background-color: #212121;
+}
 
-    .card-radius{
-      border-radius: 10px;
-    }
+.toolbar-title.toolbar-title-md,
+.toolbar-title.toolbar-title-ios,
+.toolbar-title.toolbar-title-wp{
+  color: white;
+}
 
-    .scale{
-      height: auto;
-      width: auto;
-      max-width: 300px;
-      max-height: 300px;
-    }
+.toolbar.toolbar-md,
+.toolbar.toolbar-ios,
+.toolbar.toolbar-wp{
+  color: white;
+}
+
+
+.tabs-md .tabbar {
+  font-family: 'Prompt', sans-serif;
+  background: #000000;
+}
+
+.fontCustomer{
+  font-family: 'Prompt', sans-serif;
+}
+
+.stroke {
+  -webkit-text-stroke: 0.5px black;
+  color: white;
+  text-shadow: 3px 3px 0 #000,
+  -1px -1px 0 #000,
+  1px -1px 0 #000,
+  -1px 1px 0 #000,
+  1px 1px 0 #000;
+}
+
+.cards-bg {
+  background-image: url("../assets/imgs/bg_header.jpg");
+  background-color: transparent;
+}
+
+.card-radius {
+  border-radius: 10px;
+}
+
+.scale {
+  height: auto;
+  width: auto;
+  max-width: 300px;
+  max-height: 300px;
+}
+
+.btn-login {
+  margin-top: 10%;
+  border-radius: 2px;
+  border: 1px solid #ffffff;
+  background: transparent;
+}
 

@@ -13,28 +13,31 @@
 </ion-header> -->
 
 
-<ion-content padding class="test">
-<ion-grid style="margin-top: 50%;">
-  <form (ngSubmit)="loginForm()">
+<ion-content padding class="parallax">
+<ion-grid>
+  <form (ngSubmit)="loginForm()" style="margin-top: 2rem;">
     <ion-row>
-      <ion-col>
+      <ion-col col-12 text-center="">
+        <img src="../../assets/imgs/logo-2.png" height="150px" width="150px">
+      </ion-col>
+      <ion-col col-12 style="color: white;margin-top: 5%;" text-center>
+        <h1><strong>เข้าสู่ระบบ</strong></h1>
+      </ion-col>
+      <ion-col col-12>
           <ion-item>
-              <ion-label color="primary" stacked>E-mail :</ion-label>
-              <ion-input type="email" [(ngModel)]="login.email" name="email" placeholder="Your email"></ion-input>  
+              <ion-input type="email" [(ngModel)]="login.email" name="email" placeholder="อีเมลล์"></ion-input>
           </ion-item>
       </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-          <ion-item>
-              <ion-label color="primary" stacked>Password :</ion-label>
-              <ion-input type="password" [(ngModel)]="login.password" name="password" placeholder="Your password"></ion-input>  
-          </ion-item>
+      <ion-col col-12>
+        <ion-item>
+          <ion-input type="password" [(ngModel)]="login.password" name="password" placeholder="รหัสผ่าน"></ion-input>
+        </ion-item>
       </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col text-center>
-          <button ion-button round style="width: 90%;" color="secondary" type="submit">เข้าสู่ระบบ</button>
+      <ion-col col-12 text-center>
+        <button ion-button round class="btn-login" style="width: 100%;" color="secondary" type="submit">เข้าสู่ระบบ</button>
+      </ion-col>
+      <ion-col col-12 text-center>
+        <p style="margin-top: 2%; color: white;" (click)="reg();">สมัครสมาชิก</p>
       </ion-col>
     </ion-row>
   </form>

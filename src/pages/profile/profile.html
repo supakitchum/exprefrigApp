@@ -1,50 +1,40 @@
 <ion-header>
-  <ion-navbar *navbar>
-    <ion-title style="text-align: center;">My Account</ion-title>
+  <ion-navbar>
+    <ion-buttons left style="position: absolute;">
+      <button ion-button menuToggle>
+        <ion-icon name="menu" style="font-size: 3rem;color: white;"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title align="center"><img src="../../assets/imgs/logo-2.png" height="50" width="50" style="margin-top: 1%;"></ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content>
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content>
-    </ion-refresher-content>
-  </ion-refresher>
-  <ion-grid class="parallax" *ngIf="!uid">
-    <ion-row class="stroke">
-      <ion-col style="text-align: center;font-size: 5rem;">
-        <p>ยินดีต้อนรับสู่<br>" Exprefrig"</p>
+<ion-content padding class="parallax">
+  <ion-grid>
+    <ion-row text-center>
+      <ion-col col-12><img src="../../assets/imgs/profile.png" height="200" width="200"></ion-col>
+      <ion-col col-12>
+        <ion-item>
+          <ion-label>E-mail : </ion-label>
+          <ion-input readonly type="email" id="email" name="email" [(ngModel)]="email"></ion-input>
+        </ion-item>
       </ion-col>
-    </ion-row>
-    <ion-row style="padding: 10%;">
-      <ion-col>
-        <button ion-button round style="width: 100%;" color="secondary" (click)="login()">เข้าสู่ระบบ</button>
+      <ion-col col-12>
+        <ion-item>
+          <ion-label>ชื่อ : </ion-label>
+          <ion-input type="text" id="name" name="name" [(ngModel)]="name"></ion-input>
+        </ion-item>
       </ion-col>
-      <ion-col>
-        <button ion-button round style="width: 100%;" (click)="reg()">สมัครสมาชิก</button>
+      <ion-col col-12>
+        <ion-item>
+          <ion-label>รหัสผ่านใหม่ : </ion-label>
+          <ion-input type="password" id="password" name="password" [(ngModel)]="password"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12>
+        <button ion-button class="btn-login" style="width: 100%;" (click)="submit()">บันทึก</button>
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-content class="parallax" *ngIf="uid">
-    <ion-list>
-      <ion-card class="card-radius">
-        <ion-card-content>
-          <ion-card-title>
-          </ion-card-title>
-          <ion-item>
-            <ion-icon name="alarm" item-start large></ion-icon>
-            <h2>ชื่</h2>
-            <p>Test</p>
-          </ion-item>
-        </ion-card-content>
-        <ion-row no-padding (click)="logout()">
-          <ion-col text-center>
-            <button ion-button clear small color="danger" icon-start>
-              <ion-icon name='trash'></ion-icon>
-              ออกจากระบบ
-            </button>
-          </ion-col>
-        </ion-row>
-      </ion-card>
-    </ion-list>
-  </ion-content>
 </ion-content>
+

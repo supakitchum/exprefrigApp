@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NavController, NavParams, ViewController,LoadingController} from 'ionic-angular';
+import {NavController, NavParams, ViewController, LoadingController, ModalController} from 'ionic-angular';
 import { DatePicker } from '@ionic-native/date-picker';
 import { HTTP } from '@ionic-native/http';
 import { Storage } from '@ionic/storage';
@@ -9,6 +9,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file';
 import { Platform , ActionSheetController } from 'ionic-angular';
 
+import {HomePage} from "../home/home";
 
 
 /**
@@ -23,10 +24,10 @@ import { Platform , ActionSheetController } from 'ionic-angular';
   templateUrl: 'add-item.html',
 })
 export class AddItemPage {
-  dateExp = new Date().toISOString();
-  dateYellow = new Date().toISOString();
-  dateExpShow:any;
-  dateYellowShow:any;
+  tzoffset = (new Date()).getTimezoneOffset() * 60000;
+  minDate: string = (new Date(Date.now() - this.tzoffset)).toISOString().slice(0, -1);
+  dateExp: string = (new Date(Date.now() - this.tzoffset)).toISOString().slice(0, -1);
+  dateYellow: string = (new Date(Date.now() - this.tzoffset)).toISOString().slice(0, -1);
   rid:any;
   url:any;
   uid:any;
@@ -38,8 +39,6 @@ export class AddItemPage {
   id_noti_red:any;
   method = 0;
   options = { year: 'numeric', month: '2-digit', day: '2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit' };
-  tzoffset = (new Date()).getTimezoneOffset() * 60000;
-  minDate: string = (new Date(Date.now() - this.tzoffset)).toISOString().slice(0, -1);
 
   constructor(
     private localNotifications: LocalNotifications,
@@ -53,12 +52,18 @@ export class AddItemPage {
     private transfer: FileTransfer, private file: File,
     private loadingCtrl:LoadingController,
     public actionSheetCtrl: ActionSheetController,
-    public platform: Platform
+    public platform: Platform,
+    public modalCtrl: ModalController
 
   ){
     storage.get('urlApi').then((val) => {
       this.url = val;
     });
+    this.getData();
+
+  }
+
+  getData(){
     this.storage.get('uid').then((val) => {
       this.uid = val;
       this.http.get(this.url+"/myDevice/"+val, {}, {})
@@ -77,6 +82,14 @@ export class AddItemPage {
     });
   }
 
+  showMyDevice(){
+    const modal = this.modalCtrl.create(HomePage,{modelCheck:true});
+    modal.present();
+    modal.onDidDismiss(() => {
+      this.doRefresh(null);
+    });
+  }
+
   ionViewDidLoad() {
     this.storage.get('urlApi').then((val) => {
       this.url = val;
@@ -86,16 +99,12 @@ export class AddItemPage {
         let oldData = this.params.get('data');
         this.itemForm["name"] = oldData.name;
         this.pv_key_old = oldData.private_key;
+        this.itemForm["pvkey"] = oldData.private_key;
         this.oldPhoto = val + "/" + oldData.image;
         this.myPhoto = val + "/" + oldData.image;
       }
     });
     this.method = this.params.get('method');
-  }
-
-  setDate(dateTime:any){
-    console.log(JSON.stringify(dateTime));
-
   }
 
   presentActionSheet() {
@@ -166,46 +175,26 @@ export class AddItemPage {
   }
 
   doRefresh(refresher) {
-    if(refresher !== null){
-      setTimeout(() => {
-        refresher.complete();
-      }, 2000);
-    }
+    let loader = this.loadingCtrl.create({
+      content: "รอสักครู่"
+    });
+    loader.present();
+    setTimeout(() => {
+      this.minDate = (new Date(Date.now() - this.tzoffset)).toISOString().slice(0, -1);
+      this.getData();
+      loader.dismiss();
+      refresher.complete();
+    }, 2000);
 
   }
-
-  // datePick(){
-  //   this.datePicker.show({
-  //     date: new Date(),
-  //     mode: 'datetime',
-  //     allowOldDates: false,
-  //     androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
-  //   }).then(
-  //     date => [this.dateExp = date,this.dateExpShow = date.toLocaleDateString('th-TH', this.options)],
-  //     err => console.log('Error occurred while getting date: ', err),
-  //   );
-  //   this.doRefresh(null);
-  // }
-  //
-  // datePickYellow(){
-  //   this.datePicker.show({
-  //     date: new Date(),
-  //     mode: 'datetime',
-  //     allowOldDates: false,
-  //     androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
-  //   }).then(
-  //     date => [this.dateYellow = date,this.dateYellowShow = date.toLocaleDateString('th-TH', this.options)],
-  //     err => console.log('Error occurred while getting date: ', err)
-  //   );
-  //   this.doRefresh(null);
-  // }
 
   addForm(){
     // console.log("rid: "+this.rid+" name: "+this.itemForm["name"]+" datetime: "+this.dateExp+" datetimeYellow: "+this.dateYellow+" private_key: "+this.itemForm["pvkey"]);
     let loader = this.loadingCtrl.create({
-      content: "Adding..."
+      content: "กำลังอัพโหลด"
     });
     loader.present();
+
     this.http.post(this.url+'/refrigerator/addItem', {id:this.rid,name:this.itemForm["name"],datetime:this.dateExp,datetimeYellow:this.dateYellow,private_key:this.itemForm["pvkey"]}, {})
       .then(data => {
         if (this.oldPhoto != this.myPhoto)
@@ -214,11 +203,11 @@ export class AddItemPage {
           loader.dismiss();
         this.noti(this.dateExp);
         this.dismiss();
-        this.doRefresh(null);
         console.log(data);
       })
       .catch(error => {
-
+        alert("Error Add Item.");
+        loader.dismiss();
         console.log(error.status);
         console.log(error.error); // error message as string
         console.log(error.headers);
@@ -246,119 +235,120 @@ export class AddItemPage {
       .then((data) => {
         alert("Success");
         loader.dismiss();
+        this.doRefresh(null);
       }, (err) => {
         console.log(err);
-        alert("Error");
+        alert("Error Add Image.");
         loader.dismiss();
       });
   }
 
   noti(dateTime:string){
     //method add
-    if (this.method == 1) {
-      this.storage.get('id_noti')
-        .then((id_noti)=>{
-          if (id_noti < 0){
-            id_noti = 0;
-            this.storage.set('id_noti',0);
-            this.storage.set(this.itemForm["pvkey"]+'_red',id_noti+1);
-            this.storage.set(this.itemForm["pvkey"]+'_yellow',id_noti+2);
-            this.localNotifications.schedule({
-              id: id_noti+1,
-              title:'Exprefrig : แจ้งเตือนสถานะ',
-              text: this.itemForm["name"]+' หมดอายุ!!!',
-              trigger:{at: new Date(dateTime)},
-            });
-
-            this.localNotifications.schedule({
-              id: id_noti+2,
-              title:'Exprefrig : แจ้งเตือนสถานะ',
-              text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
-              trigger:{at: new Date(this.dateYellow)},
-            });
-            this.storage.set('id_noti',id_noti+2);
-          }
-          else{
-            this.localNotifications.schedule({
-              id: id_noti+1,
-              title:'Exprefrig : แจ้งเตือนสถานะ',
-              text: this.itemForm["name"]+' หมดอายุ!!!',
-              trigger:{at: new Date(dateTime)},
-            });
-
-            this.localNotifications.schedule({
-              id: id_noti+2,
-              title:'Exprefrig : แจ้งเตือนสถานะ',
-              text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
-              trigger:{at: new Date(this.dateYellow)},
-            });
-            this.storage.set('id_noti',id_noti+2);
-          }
-        });
-    }else{ //method Edit
-      this.storage.get(this.itemForm["pvkey"]+'_red').then((id_noti_red) => {
-        this.id_noti_red = id_noti_red;
-        this.storage.get(this.itemForm["pvkey"]+'_yellow').then((id_noti_yellow) => {
-          if (id_noti_red > 0 && id_noti_yellow > 0){
-            // Schedule a single notification
-            this.localNotifications.cancel(id_noti_red);
-            this.localNotifications.cancel(id_noti_yellow);
-            this.localNotifications.schedule({
-              id: id_noti_red,
-              title:'Exprefrig : แจ้งเตือนสถานะ',
-              text: this.itemForm["name"]+' หมดอายุ!!!',
-              trigger:{at: new Date(dateTime)},
-            });
-
-            this.localNotifications.schedule({
-              id: id_noti_yellow,
-              title:'Exprefrig : แจ้งเตือนสถานะ',
-              text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
-              trigger:{at: new Date(this.dateYellow)},
-            });
-          }
-          else {
-            this.storage.get('id_noti')
-              .then((id_noti)=>{
-                if (id_noti < 0){
-                  this.storage.set('id_noti',0);
-                  this.storage.set(this.itemForm["pvkey"]+'_red',id_noti+1);
-                  this.storage.set(this.itemForm["pvkey"]+'_yellow',id_noti+2);
-                  this.localNotifications.schedule({
-                    id: id_noti+1,
-                    title:'Exprefrig : แจ้งเตือนสถานะ',
-                    text: this.itemForm["name"]+' หมดอายุ!!!',
-                    trigger:{at: new Date(dateTime)},
-                  });
-
-                  this.localNotifications.schedule({
-                    id: id_noti+2,
-                    title:'Exprefrig : แจ้งเตือนสถานะ',
-                    text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
-                    trigger:{at: new Date(this.dateYellow)},
-                  });
-                  this.storage.set('id_noti',id_noti+2);
-                }
-                else{
-                  this.localNotifications.schedule({
-                    id: id_noti+1,
-                    title:'Exprefrig : แจ้งเตือนสถานะ',
-                    text: this.itemForm["name"]+' หมดอายุ!!!',
-                    trigger:{at: new Date(dateTime)},
-                  });
-
-                  this.localNotifications.schedule({
-                    id: id_noti+2,
-                    title:'Exprefrig : แจ้งเตือนสถานะ',
-                    text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
-                    trigger:{at: new Date(this.dateYellow)},
-                  });
-                  this.storage.set('id_noti',id_noti+2);
-                }
-              });
-          }
-        });
-      });
-    }
+    // if (this.method == 1) {
+    //   this.storage.get('id_noti')
+    //     .then((id_noti)=>{
+    //       if (id_noti < 0){
+    //         id_noti = 0;
+    //         this.storage.set('id_noti',0);
+    //         this.storage.set(this.itemForm["pvkey"]+'_red',id_noti+1);
+    //         this.storage.set(this.itemForm["pvkey"]+'_yellow',id_noti+2);
+    //         this.localNotifications.schedule({
+    //           id: id_noti+1,
+    //           title:'Exprefrig : แจ้งเตือนสถานะ',
+    //           text: this.itemForm["name"]+' หมดอายุ!!!',
+    //           trigger:{at: new Date(dateTime)},
+    //         });
+    //
+    //         this.localNotifications.schedule({
+    //           id: id_noti+2,
+    //           title:'Exprefrig : แจ้งเตือนสถานะ',
+    //           text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
+    //           trigger:{at: new Date(this.dateYellow)},
+    //         });
+    //         this.storage.set('id_noti',id_noti+2);
+    //       }
+    //       else{
+    //         this.localNotifications.schedule({
+    //           id: id_noti+1,
+    //           title:'Exprefrig : แจ้งเตือนสถานะ',
+    //           text: this.itemForm["name"]+' หมดอายุ!!!',
+    //           trigger:{at: new Date(dateTime)},
+    //         });
+    //
+    //         this.localNotifications.schedule({
+    //           id: id_noti+2,
+    //           title:'Exprefrig : แจ้งเตือนสถานะ',
+    //           text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
+    //           trigger:{at: new Date(this.dateYellow)},
+    //         });
+    //         this.storage.set('id_noti',id_noti+2);
+    //       }
+    //     });
+    // }else{ //method Edit
+    //   this.storage.get(this.itemForm["pvkey"]+'_red').then((id_noti_red) => {
+    //     this.id_noti_red = id_noti_red;
+    //     this.storage.get(this.itemForm["pvkey"]+'_yellow').then((id_noti_yellow) => {
+    //       if (id_noti_red > 0 && id_noti_yellow > 0){
+    //         // Schedule a single notification
+    //         this.localNotifications.cancel(id_noti_red);
+    //         this.localNotifications.cancel(id_noti_yellow);
+    //         this.localNotifications.schedule({
+    //           id: id_noti_red,
+    //           title:'Exprefrig : แจ้งเตือนสถานะ',
+    //           text: this.itemForm["name"]+' หมดอายุ!!!',
+    //           trigger:{at: new Date(dateTime)},
+    //         });
+    //
+    //         this.localNotifications.schedule({
+    //           id: id_noti_yellow,
+    //           title:'Exprefrig : แจ้งเตือนสถานะ',
+    //           text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
+    //           trigger:{at: new Date(this.dateYellow)},
+    //         });
+    //       }
+    //       else {
+    //         this.storage.get('id_noti')
+    //           .then((id_noti)=>{
+    //             if (id_noti < 0){
+    //               this.storage.set('id_noti',0);
+    //               this.storage.set(this.itemForm["pvkey"]+'_red',id_noti+1);
+    //               this.storage.set(this.itemForm["pvkey"]+'_yellow',id_noti+2);
+    //               this.localNotifications.schedule({
+    //                 id: id_noti+1,
+    //                 title:'Exprefrig : แจ้งเตือนสถานะ',
+    //                 text: this.itemForm["name"]+' หมดอายุ!!!',
+    //                 trigger:{at: new Date(dateTime)},
+    //               });
+    //
+    //               this.localNotifications.schedule({
+    //                 id: id_noti+2,
+    //                 title:'Exprefrig : แจ้งเตือนสถานะ',
+    //                 text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
+    //                 trigger:{at: new Date(this.dateYellow)},
+    //               });
+    //               this.storage.set('id_noti',id_noti+2);
+    //             }
+    //             else{
+    //               this.localNotifications.schedule({
+    //                 id: id_noti+1,
+    //                 title:'Exprefrig : แจ้งเตือนสถานะ',
+    //                 text: this.itemForm["name"]+' หมดอายุ!!!',
+    //                 trigger:{at: new Date(dateTime)},
+    //               });
+    //
+    //               this.localNotifications.schedule({
+    //                 id: id_noti+2,
+    //                 title:'Exprefrig : แจ้งเตือนสถานะ',
+    //                 text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
+    //                 trigger:{at: new Date(this.dateYellow)},
+    //               });
+    //               this.storage.set('id_noti',id_noti+2);
+    //             }
+    //           });
+    //       }
+    //     });
+    //   });
+    // }
   }
 }

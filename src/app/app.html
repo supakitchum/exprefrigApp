@@ -1,1 +1,43 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="content" side="left">
+
+  <ion-header style="height: 30%;" text-center>
+    <ion-toolbar class="parallax" style="height: 100%;">
+      <ion-title>
+        <p>สวัสดีคุณ {{name}}</p>
+        <p>Email : {{email}}</p>
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="fontCustomer">
+    <ion-list>
+      <button ion-item (click)="openAboutPage()">
+        <ion-icon item-start><img src="https://img.icons8.com/metro/26/000000/fridge.png" style="width: 25px;height: 25px;"></ion-icon>
+        <ion-label>ตู้เย็นของฉัน</ion-label>
+      </button>
+      <button ion-item (click)="openDevicePage()">
+        <ion-icon item-start><img src="../../assets/imgs/wifi-icon-black.png" style="width: 25px;height: 25px;"></ion-icon>
+        <ion-label>อุปกรณ์ของฉัน</ion-label>
+      </button>
+      <button ion-item (click)="openProfilePage()">
+        <ion-icon name="person" item-start></ion-icon>
+        <ion-label>บัญชีของฉัน</ion-label>
+      </button>
+      <button ion-item (click)="logout()">
+        <ion-icon name="log-out" item-start color="danger"></ion-icon>
+        <ion-label color="danger">ออกจากระบบ</ion-label>
+      </button>
+      <button ion-item (click)="changeAPI('http://192.168.137.1')">
+        <ion-icon name="log-out" item-start color="danger"></ion-icon>
+        <ion-label color="danger">Local API</ion-label>
+      </button>
+      <button ion-item (click)="changeAPI('https://exprefrig.herokuapp.com')">
+        <ion-icon name="log-out" item-start color="danger"></ion-icon>
+        <ion-label color="danger">Heroku API</ion-label>
+      </button>
+    </ion-list>
+  </ion-content>
+
+</ion-menu>
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
+

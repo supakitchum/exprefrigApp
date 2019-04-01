@@ -1,64 +1,70 @@
-<!--
-  Generated template for the ItemPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-header>
-
-  <ion-navbar>
-    <ion-toolbar>
-      <ion-buttons end>
-        <button ion-button (click)="presentModalAdd()">
-          <ion-icon name="add" style="font-size: 3rem;"></ion-icon>
-        </button>
-      </ion-buttons>
-      <ion-title>{{name}}</ion-title>
-    </ion-toolbar>
+<ion-header style="background-color: #212121 !important;">
+  <ion-navbar style="background-color: #212121 !important;">
+    <ion-title align="center"><img src="../../assets/imgs/logo-2.png" height="50" width="50" style="margin-top: 1%;"></ion-title>
   </ion-navbar>
-
 </ion-header>
 
-<ion-content class="parallax">
+<ion-content class="parallax-list-item">
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
-  <ion-list *ngFor="let item of data">
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6 *ngFor="let item of data">
+        <ion-card class="cards-list" (press)="holdCount(item.id,item.private_key)" (touchend)="endCount(item.private_key,item.name);">
+          <ion-list style="height: 160px;background-size: 100% 100%;" [style.backgroundImage]="'url('+url+'/'+item.image+')'">
+            <ion-row>
+              <ion-col col-12>
+                <div class="circle-{{item.status}}"></div>
+              </ion-col>
+            </ion-row>
+          </ion-list>
+        </ion-card>
+      </ion-col>
 
-    <ion-card class="card-radius">
-      <div align="center"><img src="{{url}}/{{item.image}}" class="scale"></div>
-      <!--(click)="parentPage(item.private_key,item.name)"-->
-      <ion-card-content>
-        <ion-card-title>
-          {{item.name}}
-        </ion-card-title>
-        <ion-item>
-          <ion-icon name="alarm" item-start large></ion-icon>
-          <h2>วันที่หมดอายุ</h2>
-          <p>{{item.dateTime}}</p>
-        </ion-item>
-      </ion-card-content>
-      <ion-row no-padding>
-        <!--<ion-col>-->
-          <!--<button ion-button clear small color="secondary" icon-start>-->
-            <!--<ion-icon name='create'></ion-icon>-->
+      <ion-col col-6>
+        <ion-card class="cards-list" style="background-color: rgba(100, 100, 100, 0.7) !important;height: 160px;">
+          <ion-list style="background-color: rgba(0, 0, 0, 0.3) !important;height: 160px;">
+            <ion-row text-center>
+              <ion-col col-12 (click)="presentModalAdd()">
+                <ion-icon name="add" style="font-size: 5rem;margin-top: 5rem;color: white;"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+  <!--<ion-list *ngFor="let item of data">-->
+    <!--<ion-card class="card-radius">-->
+      <!--<div align="center"><img src="{{url}}/{{item.image}}" class="scale"></div>-->
+      <!--&lt;!&ndash;(click)="parentPage(item.private_key,item.name)"&ndash;&gt;-->
+      <!--<ion-card-content>-->
+        <!--<ion-card-title>-->
+          <!--{{item.name}}-->
+        <!--</ion-card-title>-->
+        <!--<ion-item>-->
+          <!--<ion-icon name="alarm" item-start large style="color:black;"></ion-icon>-->
+          <!--<h2>วันที่หมดอายุ</h2>-->
+          <!--<p>{{item.dateTime}}</p>-->
+        <!--</ion-item>-->
+      <!--</ion-card-content>-->
+      <!--<ion-row no-padding>-->
+        <!--<ion-col text-center>-->
+          <!--<button ion-button clear small color="primary" icon-start (click)="presentModalEdit(item.id)">-->
+            <!--<ion-icon name='create' style="color:#4b8bf4;"></ion-icon>-->
             <!--แก้ไข-->
           <!--</button>-->
         <!--</ion-col>-->
-        <ion-col text-center>
-          <button ion-button clear small color="primary" icon-start (click)="presentModalEdit(item.id)">
-            <ion-icon name='create'></ion-icon>
-            แก้ไข
-          </button>
-        </ion-col>
-        <ion-col text-center>
-          <button ion-button clear small color="danger" icon-start (click)="deleteItem(item.private_key)">
-            <ion-icon name='trash'></ion-icon>
-            ลบ
-          </button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </ion-list>
+        <!--<ion-col text-center>-->
+          <!--<button ion-button clear small color="danger" icon-start (click)="deleteItem(item.private_key)">-->
+            <!--<ion-icon name='trash' style="color:red;"></ion-icon>-->
+            <!--ลบ-->
+          <!--</button>-->
+        <!--</ion-col>-->
+      <!--</ion-row>-->
+    <!--</ion-card>-->
+  <!--</ion-list>-->
 </ion-content>

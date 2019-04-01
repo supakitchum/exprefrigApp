@@ -14,65 +14,62 @@
     </ion-title>
     <ion-buttons start>
       <button ion-button (click)="dismiss()">
-        <ion-icon name="md-close"></ion-icon>
+        <ion-icon name="md-close" style="color: white;"></ion-icon>
       </button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 
-<ion-content padding style="background-color: white;">
-  <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content>
-
-    </ion-refresher-content>
+<ion-content padding class="parallax-list-item">
+  <ion-refresher (ionRefresh)="doRefresh($event)" style="background-color: transparent;">
+    <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-    <ion-grid>
-      <ion-row>
-        <ion-col col-12 align="center" (click)="presentActionSheet()">
-          <img src="{{ myPhoto }}" height="200" width="200">
-        </ion-col>
-        <ion-col col-12>
-          <ion-item>
-            <ion-label stacked>My Device</ion-label>
-            <ion-select [(ngModel)]="itemForm.pvkey" name="pvkey" id="pvkey">
-              <ion-option *ngIf="pv_key_old != null" selected="true"  value="{{pv_key_old}}">{{pv_key_old}}</ion-option>
-              <ion-option  value="{{item.private_key}}" *ngFor="let item of key">{{item.private_key}}</ion-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-        <ion-col col-12>
-          <ion-item>
-            <ion-label stacked>ชื่อ :{{name}}</ion-label>
-            <ion-input type="text" id="name" name="name" [(ngModel)]="itemForm.name"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col col-12>
-          <ion-item>
-            {{dateYellow}}
-            <ion-label>วันใกล้หมดอายุ :</ion-label>
-            <ion-datetime #yellow displayFormat="DD/MM/YYYY HH:mm" [min] = "minDate" max="2050" [(ngModel)]="dateYellow" (ionChange)="minDate = dateYellow;dateExp = dateYellow;"></ion-datetime>
-          </ion-item>
-          <ion-item>
-            {{dateExp}}
-            <ion-label>วันหมดอายุ :</ion-label>
-            <ion-datetime #red displayFormat="DD/MM/YYYY HH:mm"  [min] = "minDate" max="2050" [(ngModel)]="dateExp"></ion-datetime>
-          </ion-item>
-          <!--<ion-item>-->
-            <!--<ion-label stacked>วันเวลาใกล้หมดอายุ (ไฟสีเหลือง) :</ion-label>-->
-            <!--<ion-input type="text" readonly value="{{dateYellowShow}}" (click)="datePickYellow()" id="datetimeYellow" name="datetimeYellow"></ion-input>-->
-          <!--</ion-item>-->
-        </ion-col>
-        <!--<ion-col col-12>-->
-          <!--<ion-item>-->
-            <!--<ion-label stacked>วันเวลาหมดอายุ (ไฟสีแดง) :</ion-label>-->
-            <!--<ion-input type="text" readonly value="{{dateExpShow}}" (click)="datePick()" name="datetime" id="datetime"></ion-input>-->
-          <!--</ion-item>-->
-        <!--</ion-col>-->
-        <ion-col col-12>
-          <button ion-button color="secondary" style="width: 100%;" type="submit" (click)="addForm()" id="btn" *ngIf="method == 1">บันทึก</button>
-          <button ion-button color="secondary" style="width: 100%;" type="submit" (click)="addForm()" *ngIf="method == 0">บันทึกการแก้ไข</button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12 align="center" (click)="presentActionSheet()">
+        <img src="{{ myPhoto }}" height="200" width="200">
+      </ion-col>
+      <ion-col col-8>
+        <ion-item>
+          <ion-label>อุปกรณ์ :</ion-label>
+          <ion-select [(ngModel)]="itemForm.pvkey" name="pvkey" id="pvkey">
+            <ion-option *ngIf="pv_key_old != null" selected="true" value="{{pv_key_old}}">{{pv_key_old}}</ion-option>
+            <ion-option value="{{item.private_key}}" *ngFor="let item of key">{{item.private_key}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col col-4>
+        <button ion-button class="btn-login" style="width: 100%;" type="submit" (click)="showMyDevice()">+ เพิ่มอุปกรณ์
+        </button>
+      </ion-col>
+      <ion-col col-12>
+        <ion-item>
+          <ion-label>ชื่อ :{{name}}</ion-label>
+          <ion-input type="text" id="name" name="name" [(ngModel)]="itemForm.name"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12>
+        <ion-item>
+          {{dateYellow}}
+          <ion-label style="color:white;">วันใกล้หมดอายุ :</ion-label>
+          <ion-datetime #yellow displayFormat="DD/MM/YYYY HH:mm" [min]="minDate" max="2050" [(ngModel)]="dateYellow"
+                        (ionChange)="minDate = dateYellow;dateExp = dateYellow;"></ion-datetime>
+        </ion-item>
+        <ion-item>
+          {{dateExp}}
+          <ion-label>วันหมดอายุ :</ion-label>
+          <ion-datetime #red displayFormat="DD/MM/YYYY HH:mm" [min]="minDate" max="2050"
+                        [(ngModel)]="dateExp"></ion-datetime>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12>
+        <button ion-button class="btn-login" style="width: 100%;" type="submit" (click)="addForm()" id="btn" *ngIf="method == 1">บันทึก
+        </button>
+        <button ion-button class="btn-login" style="width: 100%;" type="submit" (click)="addForm()" *ngIf="method == 0">
+          บันทึกการแก้ไข
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

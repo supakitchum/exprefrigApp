@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
 import { AboutPage } from '../about/about';
-import { ProfilePage } from '../profile/profile';
+import { IndexPage } from '../index/index';
 import { HomePage } from '../home/home';
 
 @Component({
@@ -12,7 +12,7 @@ export class TabsPage {
 
   tab1Root = HomePage;
   tab2Root = AboutPage;
-  tab3Root = ProfilePage;
+  tab3Root = IndexPage;
 
   constructor() {
 

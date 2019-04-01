@@ -2,4 +2,9 @@ page-about {
   ion-card.cards-list-demo ion-card-header {
     color: map-get($colors, primary);
   }
+
+  ion-list{
+    color: white;
+    background-color: #3b3a3a;
+  }
 }

@@ -11,23 +11,23 @@
     </ion-title>
     <ion-buttons start>
       <button ion-button (click)="dismiss()">
-        <ion-icon name="md-close"></ion-icon>
+        <ion-icon name="md-close" style="color: white;"></ion-icon>
       </button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding class="parallax-list-item">
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content>
     </ion-refresher-content>
   </ion-refresher>
-  <ion-list *ngFor="let x of data">
-    <button ion-item *ngIf="checkSSID(x.SSID);" (click)="connectWifi(x.SSID)">
+  <ion-list *ngFor="let x of data" style="background-color: transparent;">
+    <button ion-item *ngIf="checkSSID(x.SSID);" (click)="connectWifi(x.SSID)" style="background-color: transparent;">
       <ion-avatar item-start>
         <img src="assets/imgs/wifi-icon.png">
       </ion-avatar >
-      <p>{{x.SSID}}</p>
+      <p style="color: white;">{{x.SSID}}</p>
     </button>
   </ion-list>
 </ion-content>

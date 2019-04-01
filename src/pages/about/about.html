@@ -1,37 +1,67 @@
 <ion-header>
   <ion-navbar>
-    <ion-toolbar>
-      <ion-buttons end>
-        <button ion-button (click)="showPrompt()">
-          <ion-icon name="add" style="font-size: 3rem;"></ion-icon>
-        </button>
-      </ion-buttons>
-      <ion-title align="center">My refrigerator</ion-title>
-    </ion-toolbar>
+    <ion-buttons left style="position: absolute;">
+      <button ion-button menuToggle>
+        <ion-icon name="menu" style="font-size: 3rem;color: white;"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title align="center"><img src="../../assets/imgs/logo-2.png" height="50" width="50" style="margin-top: 1%;"></ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="parallax">
-  <ion-refresher (ionRefresh)="doRefresh($event)">
+  <ion-refresher (ionRefresh)="doRefresh($event)" style="background-color: transparent;">
     <ion-refresher-content>
 
     </ion-refresher-content>
   </ion-refresher>
-  <ion-card class="cards-list">
-    <ion-list>
-      <ion-item-sliding #item *ngFor="let data of data_refrig">
-        <button ion-item (click)="parentPage(data.refrig_id,data.name_refrig)">
-          <ion-icon item-start><img src="https://img.icons8.com/metro/26/000000/fridge.png" style="width: 25px;height: 25px;"></ion-icon>
-          {{data.name_refrig}}
-        </button>
-        <ion-item-options side="right">
-          <button ion-button color="danger" (click)="delete(data.refrig_id)"><ion-icon name='trash' item-start></ion-icon>ลบ</button>
-          <button ion-button color="primary" (click)="editName(data.refrig_id)"><ion-icon name='create' item-start></ion-icon>แก้ไข</button>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-list>
-  </ion-card>
-
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6 *ngFor="let data of data_refrig">
+        <ion-card class="cards-list" style="background-color: rgba(100, 100, 100, 0.7) !important;height: 200px;" (press)="holdCount(data.refrig_id)">
+          <ion-list style="background-color: rgba(0, 0, 0, 0.3) !important;height: 100%;">
+            <ion-item (click)="parentPage(data.refrig_id,data.name_refrig)" style="background-color: rgba(0, 0, 0, 0.1) !important;height: 100%;">
+              <ion-row text-center>
+                <ion-col col-12>
+                  <img src="../../assets/imgs/logo-2.png" style="height: 100px;">
+                </ion-col>
+                <ion-col col-12 style="color: white;white-space:normal !important;">
+                  {{data.name_refrig}}
+                </ion-col>
+              </ion-row>
+            </ion-item>
+            <!--<ion-item-sliding #item style="background-color: rgba(0, 0, 0, 0.1) !important;">-->
+              <!--<ion-item (click)="parentPage(data.refrig_id,data.name_refrig)" style="background-color: rgba(0, 0, 0, 0.1) !important;">-->
+                <!--<ion-row text-center>-->
+                  <!--<ion-col col-12>-->
+                    <!--<img src="../../assets/imgs/logo-2.png" style="height: 100px;">-->
+                  <!--</ion-col>-->
+                  <!--<ion-col col-12 style="color: white">-->
+                    <!--{{data.name_refrig}}-->
+                  <!--</ion-col>-->
+                <!--</ion-row>-->
+              <!--</ion-item>-->
+              <!--<ion-item-options side="right">-->
+                <!--<button ion-button color="danger" (click)="delete(data.refrig_id)"><ion-icon name='trash' item-start></ion-icon>ลบ</button>-->
+                <!--<button ion-button color="primary" (click)="editName(data.refrig_id)"><ion-icon name='create' item-start></ion-icon>แก้ไข</button>-->
+              <!--</ion-item-options>-->
+            <!--</ion-item-sliding>-->
+          </ion-list>
+        </ion-card>
+      </ion-col>
+      <ion-col col-6>
+        <ion-card class="cards-list" style="background-color: rgba(100, 100, 100, 0.7) !important;height: 200px;">
+          <ion-list style="background-color: rgba(0, 0, 0, 0.3) !important;height: 200px;">
+            <ion-row text-center>
+              <ion-col col-12 (click)="showPrompt()">
+                <ion-icon name="add" style="font-size: 5rem;margin-top: 7rem;"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-list>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 <!--<ion-content padding>-->
   <!--<ion-list>-->

@@ -1,3 +1,40 @@
 page-item-detail {
+  ion-header {
+    .button-md {
+      box-shadow: none;
+    }
 
+    .toolbar-title {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+    }
+
+    .icon{
+      color: white;
+    }
+
+    .back-button{
+      position: absolute;
+      z-index: 10;
+    }
+  }
+
+  ion-list{
+    ion-item{
+      background-color: transparent !important;
+      color: white !important;
+    }
+  }
+
+  .text-exp-red{
+    color: red;
+    animation: blinker 2s linear infinite;
+  }
+
+  @keyframes blinker {
+    50% {
+      opacity: 0.5;
+    }
+  }
 }

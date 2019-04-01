@@ -1,8 +1,12 @@
 page-login {
-    @font-face {
-        src: url(../assets/font/Prompt-Regular.ttf);
-    }
-    .test{
-        font-family: 'Prompt', sans-serif;
-    }
+  .test {
+    font-family: 'Prompt', sans-serif;
+  }
+
+  .item {
+    background: transparent;
+    color: white !important;
+    padding: 0;
+    font-family: 'Prompt', sans-serif;
+  }
 }

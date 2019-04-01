@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { HTTP } from '@ionic-native/http';
-import { Storage } from '@ionic/storage';
+import {Component} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {HTTP} from '@ionic-native/http';
+import {Storage} from '@ionic/storage';
 
 /**
  * Generated class for the ItemDetailPage page.
@@ -18,24 +18,27 @@ import { Storage } from '@ionic/storage';
 export class ItemDetailPage {
   id = '';
   name = '';
-  url:any;
-  data:any;
-  exp:any;
+  url: any;
+  data: any;
+  exp: any;
   hour = 0;
   min = 0;
   sec = 0;
-  constructor(public storage: Storage,public navCtrl: NavController, public navParams: NavParams,public http: HTTP) {
+
+  constructor(public storage: Storage, public navCtrl: NavController, public navParams: NavParams, public http: HTTP) {
     this.id = navParams.get('pv_key');
     this.name = navParams.get('name');
     storage.get('urlApi').then((val) => {
       this.url = val;
-      this.http.get(val + "/get/device/"+ navParams.get('pv_key'), {}, {})
+      this.http.get(val + "/get/device/" + navParams.get('pv_key'), {}, {})
         .then(data => {
           this.data = JSON.parse(data.data);
           this.exp = JSON.parse(data.data);
           this.hour = this.exp.hour;
           this.min = this.exp.min;
           this.sec = this.exp.sec;
+          let bgURL = this.url + '/' + this.data.image;
+          document.getElementById('bg').setAttribute("style", "background-image:url('" + bgURL + "');");
           this.StartTimer();
 
         })
@@ -51,36 +54,37 @@ export class ItemDetailPage {
     // this.params = { id: 42 };
   }
 
-  StartTimer(){
+  StartTimer() {
     setTimeout(() => {
       document.getElementById('time').innerText = "";
-      if (this.hour < 0){
+      if (this.hour < 0) {
         this.hour = 0;
         this.min = 0;
         this.sec = 0;
         document.getElementById('time').innerText += " หมดอายุแล้ว";
+        document.getElementById('time').setAttribute("class", "text-exp-red");
         return;
       }
       if (this.hour < 10)
-        document.getElementById('time').innerText += "0"+this.hour.toString()+" ชั่วโมง ";
+        document.getElementById('time').innerText += "0" + this.hour.toString() + ":";
       else
-        document.getElementById('time').innerText += this.hour.toString()+" ชั่วโมง ";
+        document.getElementById('time').innerText += this.hour.toString() + ":";
       if (this.min < 10)
-        document.getElementById('time').innerText += " "+"0"+this.min.toString()+" นาที ";
+        document.getElementById('time').innerText += "0" + this.min.toString() + ":";
       else
-        document.getElementById('time').innerText += " "+this.min.toString()+" นาที";
+        document.getElementById('time').innerText += this.min.toString() + ":";
       if (this.sec < 10)
-        document.getElementById('time').innerText += " "+"0"+this.sec.toString() + " วินาที";
+        document.getElementById('time').innerText += "0" + this.sec.toString();
       else
-        document.getElementById('time').innerText += " "+this.sec.toString() + " วินาที";
+        document.getElementById('time').innerText += this.sec.toString();
 
-      if(this.sec <= 0) {
+      if (this.sec <= 0) {
         this.sec = 59;
-        if (this.min <= 0){
+        if (this.min <= 0) {
           this.min = 59;
           this.hour -= 1;
         }
-        else{
+        else {
           this.min -= 1;
         }
       }

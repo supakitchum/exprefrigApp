@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>ExprefrigApp</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <description>Exprefrig : Food Stocks Tracking Device in Refrigerator.</description>
+    <author email="supakit_chum@hotmail.com">Dank Supakit</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -36,5 +36,6 @@
     <allow-navigation href="http://192.168.137.1:8100" sessionid="d9c5f65a" />
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
+    <preference name="orientation" value="portrait" />
     <engine name="android" spec="7.1.1" />
 </widget>

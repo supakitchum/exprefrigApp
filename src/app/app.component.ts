@@ -92,7 +92,11 @@ export class MyApp {
   }
 
   changeAPI(url:string){
+    this.storage.clear();
     this.storage.set('urlApi',url);
+    this.menuCtrl.close();
+    this.app.getRootNav().setRoot(IndexPage);
+
   }
 
 }

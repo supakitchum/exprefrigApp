@@ -35,8 +35,14 @@ export class ItemDetailPage {
           this.data = JSON.parse(data.data);
           this.exp = JSON.parse(data.data);
           this.hour = this.exp.hour;
-          this.min = this.exp.min;
-          this.sec = this.exp.sec;
+          if (this.exp.sec < 4){
+            this.sec = 59 - (4 - this.exp.sec);
+            this.min = this.exp.min - 1;
+          }
+          else {
+            this.min = this.exp.min;
+            this.sec = this.exp.sec - 4;
+          }
           let bgURL = this.url + '/' + this.data.image;
           document.getElementById('bg').setAttribute("style", "background-image:url('" + bgURL + "');");
           this.StartTimer();

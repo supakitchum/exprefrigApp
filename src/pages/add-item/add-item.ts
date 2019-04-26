@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {NavController, NavParams, ViewController, LoadingController, ModalController} from 'ionic-angular';
-import { DatePicker } from '@ionic-native/date-picker';
-import { HTTP } from '@ionic-native/http';
-import { Storage } from '@ionic/storage';
-import { LocalNotifications } from '@ionic-native/local-notifications';
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-import { File } from '@ionic-native/file';
-import { Platform , ActionSheetController } from 'ionic-angular';
+import {DatePicker} from '@ionic-native/date-picker';
+import {HTTP} from '@ionic-native/http';
+import {Storage} from '@ionic/storage';
+import {LocalNotifications} from '@ionic-native/local-notifications';
+import {Camera, CameraOptions} from '@ionic-native/camera';
+import {FileTransfer, FileUploadOptions, FileTransferObject} from '@ionic-native/file-transfer';
+import {File} from '@ionic-native/file';
+import {Platform, ActionSheetController} from 'ionic-angular';
 
 import {HomePage} from "../home/home";
 
@@ -28,17 +28,17 @@ export class AddItemPage {
   minDate: string = (new Date(Date.now() - this.tzoffset)).toISOString().slice(0, -1);
   dateExp: string = (new Date(Date.now() - this.tzoffset)).toISOString().slice(0, -1);
   dateYellow: string = (new Date(Date.now() - this.tzoffset)).toISOString().slice(0, -1);
-  rid:any;
-  url:any;
-  uid:any;
-  key:any;
+  rid: any;
+  url: any;
+  uid: any;
+  key: any;
   itemForm = {};
   pv_key_old = null;
   myPhoto = "assets/imgs/add-photo.png";
-  oldPhoto:any;
-  id_noti_red:any;
+  oldPhoto: any;
+  id_noti_red: any;
   method = 0;
-  options = { year: 'numeric', month: '2-digit', day: '2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit' };
+  options = {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'};
 
   constructor(
     private localNotifications: LocalNotifications,
@@ -50,12 +50,11 @@ export class AddItemPage {
     public http: HTTP,
     public camera: Camera,
     private transfer: FileTransfer, private file: File,
-    private loadingCtrl:LoadingController,
+    private loadingCtrl: LoadingController,
     public actionSheetCtrl: ActionSheetController,
     public platform: Platform,
     public modalCtrl: ModalController
-
-  ){
+  ) {
     storage.get('urlApi').then((val) => {
       this.url = val;
     });
@@ -63,10 +62,10 @@ export class AddItemPage {
 
   }
 
-  getData(){
+  getData() {
     this.storage.get('uid').then((val) => {
       this.uid = val;
-      this.http.get(this.url+"/myDevice/"+val, {}, {})
+      this.http.get(this.url + "/myDevice/" + val, {}, {})
         .then(data => {
           this.key = JSON.parse(data.data);
         })
@@ -82,8 +81,8 @@ export class AddItemPage {
     });
   }
 
-  showMyDevice(){
-    const modal = this.modalCtrl.create(HomePage,{modelCheck:true});
+  showMyDevice() {
+    const modal = this.modalCtrl.create(HomePage, {modelCheck: true});
     modal.present();
     modal.onDidDismiss(() => {
       this.doRefresh(null);
@@ -93,9 +92,9 @@ export class AddItemPage {
   ionViewDidLoad() {
     this.storage.get('urlApi').then((val) => {
       this.url = val;
-      if(this.params.get('refrig_id'))
+      if (this.params.get('refrig_id'))
         this.rid = this.params.get('refrig_id');
-      if(this.params.get('data')){
+      if (this.params.get('data')) {
         let oldData = this.params.get('data');
         this.itemForm["name"] = oldData.name;
         this.pv_key_old = oldData.private_key;
@@ -116,13 +115,13 @@ export class AddItemPage {
           handler: () => {
             this.takePhoto();
           }
-        },{
+        }, {
           text: 'เลือกรูปภาพจากคลัง',
           icon: !this.platform.is('ios') ? 'photos' : null,
           handler: () => {
             this.getPhoto();
           }
-        },{
+        }, {
           text: 'ยกเลิก',
           role: 'cancel',
           icon: !this.platform.is('ios') ? 'close' : null,
@@ -135,7 +134,7 @@ export class AddItemPage {
     actionSheet.present();
   }
 
-  takePhoto(){
+  takePhoto() {
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -153,12 +152,12 @@ export class AddItemPage {
     });
   }
 
-  getPhoto(){
+  getPhoto() {
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
-      saveToPhotoAlbum:false
+      saveToPhotoAlbum: false
     }
 
     this.camera.getPicture(options).then((imageData) => {
@@ -188,22 +187,28 @@ export class AddItemPage {
 
   }
 
-  addForm(){
+  addForm() {
     // console.log("rid: "+this.rid+" name: "+this.itemForm["name"]+" datetime: "+this.dateExp+" datetimeYellow: "+this.dateYellow+" private_key: "+this.itemForm["pvkey"]);
     let loader = this.loadingCtrl.create({
       content: "กำลังอัพโหลด"
     });
     loader.present();
 
-    this.http.post(this.url+'/refrigerator/addItem', {id:this.rid,name:this.itemForm["name"],datetime:this.dateExp,datetimeYellow:this.dateYellow,private_key:this.itemForm["pvkey"]}, {})
+    this.http.post(this.url + '/refrigerator/addItem', {
+      id: this.rid,
+      name: this.itemForm["name"],
+      datetime: this.dateExp,
+      datetimeYellow: this.dateYellow,
+      private_key: this.itemForm["pvkey"]
+    }, {})
       .then(data => {
         if (this.oldPhoto != this.myPhoto)
-          this.uploadImage(this.itemForm["pvkey"],loader);
+          this.uploadImage(this.itemForm["pvkey"], loader);
         else
           loader.dismiss();
-        this.noti(this.dateExp);
+
+        this.noti();
         this.dismiss();
-        console.log(data);
       })
       .catch(error => {
         alert("Error Add Item.");
@@ -215,7 +220,7 @@ export class AddItemPage {
       });
   }
 
-  uploadImage(pv_key:any,loader:any){
+  uploadImage(pv_key: any, loader: any) {
     //create file transfer object
     const fileTransfer: FileTransferObject = this.transfer.create();
 
@@ -223,7 +228,7 @@ export class AddItemPage {
     //option transfer
     let options: FileUploadOptions = {
       fileKey: 'photo',
-      fileName: pv_key+"_" + Date.now() + ".jpg",
+      fileName: pv_key + "_" + Date.now() + ".jpg",
       chunkedMode: false,
       httpMethod: 'post',
       mimeType: "image/jpeg",
@@ -231,7 +236,7 @@ export class AddItemPage {
     }
 
     //file transfer action
-    fileTransfer.upload(this.myPhoto, this.url+'/add/image/'+pv_key, options)
+    fileTransfer.upload(this.myPhoto, this.url + '/add/image/' + pv_key, options)
       .then((data) => {
         alert("Success");
         loader.dismiss();
@@ -243,112 +248,52 @@ export class AddItemPage {
       });
   }
 
-  noti(dateTime:string){
+  noti() {
+    console.log("noti");
     //method add
-    // if (this.method == 1) {
-    //   this.storage.get('id_noti')
-    //     .then((id_noti)=>{
-    //       if (id_noti < 0){
-    //         id_noti = 0;
-    //         this.storage.set('id_noti',0);
-    //         this.storage.set(this.itemForm["pvkey"]+'_red',id_noti+1);
-    //         this.storage.set(this.itemForm["pvkey"]+'_yellow',id_noti+2);
-    //         this.localNotifications.schedule({
-    //           id: id_noti+1,
-    //           title:'Exprefrig : แจ้งเตือนสถานะ',
-    //           text: this.itemForm["name"]+' หมดอายุ!!!',
-    //           trigger:{at: new Date(dateTime)},
-    //         });
-    //
-    //         this.localNotifications.schedule({
-    //           id: id_noti+2,
-    //           title:'Exprefrig : แจ้งเตือนสถานะ',
-    //           text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
-    //           trigger:{at: new Date(this.dateYellow)},
-    //         });
-    //         this.storage.set('id_noti',id_noti+2);
-    //       }
-    //       else{
-    //         this.localNotifications.schedule({
-    //           id: id_noti+1,
-    //           title:'Exprefrig : แจ้งเตือนสถานะ',
-    //           text: this.itemForm["name"]+' หมดอายุ!!!',
-    //           trigger:{at: new Date(dateTime)},
-    //         });
-    //
-    //         this.localNotifications.schedule({
-    //           id: id_noti+2,
-    //           title:'Exprefrig : แจ้งเตือนสถานะ',
-    //           text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
-    //           trigger:{at: new Date(this.dateYellow)},
-    //         });
-    //         this.storage.set('id_noti',id_noti+2);
-    //       }
-    //     });
-    // }else{ //method Edit
-    //   this.storage.get(this.itemForm["pvkey"]+'_red').then((id_noti_red) => {
-    //     this.id_noti_red = id_noti_red;
-    //     this.storage.get(this.itemForm["pvkey"]+'_yellow').then((id_noti_yellow) => {
-    //       if (id_noti_red > 0 && id_noti_yellow > 0){
-    //         // Schedule a single notification
-    //         this.localNotifications.cancel(id_noti_red);
-    //         this.localNotifications.cancel(id_noti_yellow);
-    //         this.localNotifications.schedule({
-    //           id: id_noti_red,
-    //           title:'Exprefrig : แจ้งเตือนสถานะ',
-    //           text: this.itemForm["name"]+' หมดอายุ!!!',
-    //           trigger:{at: new Date(dateTime)},
-    //         });
-    //
-    //         this.localNotifications.schedule({
-    //           id: id_noti_yellow,
-    //           title:'Exprefrig : แจ้งเตือนสถานะ',
-    //           text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
-    //           trigger:{at: new Date(this.dateYellow)},
-    //         });
-    //       }
-    //       else {
-    //         this.storage.get('id_noti')
-    //           .then((id_noti)=>{
-    //             if (id_noti < 0){
-    //               this.storage.set('id_noti',0);
-    //               this.storage.set(this.itemForm["pvkey"]+'_red',id_noti+1);
-    //               this.storage.set(this.itemForm["pvkey"]+'_yellow',id_noti+2);
-    //               this.localNotifications.schedule({
-    //                 id: id_noti+1,
-    //                 title:'Exprefrig : แจ้งเตือนสถานะ',
-    //                 text: this.itemForm["name"]+' หมดอายุ!!!',
-    //                 trigger:{at: new Date(dateTime)},
-    //               });
-    //
-    //               this.localNotifications.schedule({
-    //                 id: id_noti+2,
-    //                 title:'Exprefrig : แจ้งเตือนสถานะ',
-    //                 text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
-    //                 trigger:{at: new Date(this.dateYellow)},
-    //               });
-    //               this.storage.set('id_noti',id_noti+2);
-    //             }
-    //             else{
-    //               this.localNotifications.schedule({
-    //                 id: id_noti+1,
-    //                 title:'Exprefrig : แจ้งเตือนสถานะ',
-    //                 text: this.itemForm["name"]+' หมดอายุ!!!',
-    //                 trigger:{at: new Date(dateTime)},
-    //               });
-    //
-    //               this.localNotifications.schedule({
-    //                 id: id_noti+2,
-    //                 title:'Exprefrig : แจ้งเตือนสถานะ',
-    //                 text: this.itemForm["name"]+' ใกล้หมดอายุ!!!',
-    //                 trigger:{at: new Date(this.dateYellow)},
-    //               });
-    //               this.storage.set('id_noti',id_noti+2);
-    //             }
-    //           });
-    //       }
-    //     });
-    //   });
-    // }
+    this.http.get(this.url + '/get/notification/' + this.itemForm["pvkey"], {}, {})
+      .then(data => {
+        data = JSON.parse(data.data);
+        console.log(data[0]["noti_yellow"]);
+        console.log(data[0]["noti_red"]);
+        console.log(data[0]["dateTimeYellow"]);
+        console.log(data[0]["dateTime"]);
+        if (this.method == 1) {
+          this.localNotifications.schedule({
+            id: data[0]["noti_yellow"],
+            title: 'Exprefrig : แจ้งเตือนสถานะ',
+            text: this.itemForm["name"] + ' ใกล้หมดอายุ!!!',
+            trigger: {at: new Date(data[0]["dateTimeYellow"])},
+          });
+          this.localNotifications.schedule({
+            id: data[0]["noti_red"],
+            title: 'Exprefrig : แจ้งเตือนสถานะ',
+            text: this.itemForm["name"] + ' หมดอายุ!!!',
+            trigger: {at: new Date(data[0]["dateTime"])},
+          });
+        }
+        else {
+          this.localNotifications.cancel(data[0]["noti_yellow"]).then();
+          this.localNotifications.cancel(data[0]["noti_red"]).then();
+          this.localNotifications.schedule({
+            id: data[0]["noti_yellow"],
+            title: 'Exprefrig : แจ้งเตือนสถานะ',
+            text: this.itemForm["name"] + ' ใกล้หมดอายุ!!!',
+            trigger: {at: new Date(data[0]["dateTimeYellow"])},
+          });
+          this.localNotifications.schedule({
+            id: data[0]["noti_red"],
+            title: 'Exprefrig : แจ้งเตือนสถานะ',
+            text: this.itemForm["name"] + ' หมดอายุ!!!',
+            trigger: {at: new Date(data[0]["dateTime"])},
+          });
+        }
+
+      })
+      .catch(error => {
+        console.log(error.status);
+        console.log(error.error); // error message as string
+        console.log(error.headers);
+      });
   }
 }
